@@ -1,13 +1,36 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import type { Map as MapLibreMap } from "maplibre-gl";
+import type { Map as MapLibreMap, StyleSpecification } from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
 
 // Future City (المستقبل سيتي), New Cairo — [lng, lat]
 const DEFAULT_CENTER: [number, number] = [31.497, 30.019];
 const DEFAULT_ZOOM = 13;
 
-const MAP_STYLE = "https://demotiles.maplibre.org/style.json";
+// Satellite imagery style (ESRI World Imagery — no API key)
+const SATELLITE_STYLE: StyleSpecification = {
+  version: 8,
+  sources: {
+    satellite: {
+      type: "raster",
+      tiles: [
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      ],
+      tileSize: 256,
+      attribution: "© Esri",
+    },
+  },
+  layers: [
+    {
+      id: "satellite-layer",
+      type: "raster",
+      source: "satellite",
+      minzoom: 0,
+      maxzoom: 22,
+    },
+  ],
+};
 
 export function LocationMap() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -18,14 +41,13 @@ export function LocationMap() {
 
     async function initMap() {
       const maplibregl = (await import("maplibre-gl")).default;
-      await import("maplibre-gl/dist/maplibre-gl.css");
 
       if (!containerRef.current) return;
       if (mapRef.current) return; // already initialized
 
       const map = new maplibregl.Map({
         container: containerRef.current,
-        style: MAP_STYLE,
+        style: SATELLITE_STYLE,
         center: DEFAULT_CENTER,
         zoom: DEFAULT_ZOOM,
       });
