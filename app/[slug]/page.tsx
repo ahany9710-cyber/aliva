@@ -5,6 +5,7 @@ import { LandingPageTemplate } from "@/components/LandingPageTemplate";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 /**
@@ -38,9 +39,10 @@ export function generateStaticParams() {
   return getAllProjectSlugs().map((slug) => ({ slug }));
 }
 
-export default async function ProjectPage({ params }: PageProps) {
+export default async function ProjectPage({ params, searchParams }: PageProps) {
   const { slug } = await params;
+  const search = await searchParams;
   const project = getProjectBySlug(slug);
   if (!project) notFound();
-  return <LandingPageTemplate project={project} />;
+  return <LandingPageTemplate project={project} searchParams={search} />;
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import { Suspense } from "react";
 import type { ProjectContent } from "@/types/project";
 import { MinimalHeader } from "@/components/layout/MinimalHeader";
 import { MinimalFooter } from "@/components/layout/MinimalFooter";
@@ -16,13 +15,14 @@ import { FinalCTASection } from "@/components/sections/FinalCTASection";
 
 interface LandingPageTemplateProps {
   project: ProjectContent;
+  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
 /**
  * Single landing page layout: header, all sections in order, footer, sticky mobile CTA.
  * Used by the dynamic [slug] route — add new projects by adding content only.
  */
-export function LandingPageTemplate({ project }: LandingPageTemplateProps) {
+export function LandingPageTemplate({ project, searchParams }: LandingPageTemplateProps) {
   return (
     <>
       <MinimalHeader
@@ -35,9 +35,7 @@ export function LandingPageTemplate({ project }: LandingPageTemplateProps) {
         <WhyThisSection project={project} />
         <LocationSection project={project} />
         <PricingSection project={project} />
-        <Suspense fallback={<div className="py-16 text-center text-muted">جاري التحميل...</div>}>
-          <LeadFormSection project={project} />
-        </Suspense>
+        <LeadFormSection project={project} searchParams={searchParams} />
         <FAQSection project={project} />
         <FinalCTASection project={project} />
       </main>

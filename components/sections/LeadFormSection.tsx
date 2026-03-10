@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Button } from "@/components/ui/Button";
@@ -11,11 +11,20 @@ const EGYPT_PHONE_REGEX = /^(\+20|0)?1[0-2,5]{1}[0-9]{8}$/;
 
 interface LeadFormSectionProps {
   project: ProjectContent;
+  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
-export function LeadFormSection({ project }: LeadFormSectionProps) {
+function getParam(
+  v: string | string[] | undefined
+): string | undefined {
+  if (v == null) return undefined;
+  return Array.isArray(v) ? v[0] : v;
+}
+
+export function LeadFormSection({ project, searchParams }: LeadFormSectionProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const utmSource = getParam(searchParams?.utm_source);
+  const utmCampaign = getParam(searchParams?.utm_campaign);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -42,14 +51,10 @@ export function LeadFormSection({ project }: LeadFormSectionProps) {
     setErrors({});
 
     const normalizedPhone = phone.replace(/\s/g, "");
-    const source = [
-      searchParams.get("utm_source"),
-      searchParams.get("utm_campaign"),
-    ]
-      .filter(Boolean)
-      .join(" | ") || undefined;
+    const source = [utmSource, utmCampaign].filter(Boolean).join(" | ") || undefined;
 
     try {
+      // POST to API route; server inserts into Supabase leads table (no mock).
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

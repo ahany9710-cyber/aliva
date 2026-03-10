@@ -92,4 +92,14 @@ lib/supabase.ts        # Supabase client (browser + server)
    | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | (your publishable key) | From Supabase Dashboard → Settings → API |
    | `SUPABASE_SECRET_KEY` | (your secret key) | Server-only; used by `/api/leads` |
 
-3. Deploy. Future pushes to `main` auto-deploy. No `vercel.json` required for this app.
+3. Deploy. Future pushes to `main` auto-deploy.
+
+**Required Vercel environment variables** (must be set for lead form to work in production):
+
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL, e.g. `https://lreayrvngzhvhcgmazcg.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Publishable key from Supabase Dashboard → Settings → API |
+| `SUPABASE_SECRET_KEY` | Secret key (server-only); used by `POST /api/leads` to insert leads |
+
+A minimal `vercel.json` is included to set the framework; optional redirects or headers can be added there later.
