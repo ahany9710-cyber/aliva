@@ -31,6 +31,7 @@ export function HeroSection({ project }: HeroSectionProps) {
             muted
             loop
             playsInline
+            preload="metadata"
             className="absolute inset-0 h-full w-full object-cover"
             aria-label={project.projectName}
           />
@@ -123,6 +124,7 @@ export function HeroSection({ project }: HeroSectionProps) {
             fill
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 50vw"
+            quality={82}
             priority
           />
         </motion.div>

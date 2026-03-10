@@ -1,18 +1,41 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import type { ProjectContent } from "@/types/project";
 import type { NextSearchParams } from "@/types/next";
 import { MinimalHeader } from "@/components/layout/MinimalHeader";
 import { StickyMobileCTA } from "@/components/layout/StickyMobileCTA";
 import { WindowSplashScreen } from "@/components/WindowSplashScreen";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { UnitsCardsSection } from "@/components/sections/UnitsCardsSection";
-import { HighlightsSection } from "@/components/sections/HighlightsSection";
-import { LocationSection } from "@/components/sections/LocationSection";
-import { PricingSection } from "@/components/sections/PricingSection";
-import { LeadFormSection } from "@/components/sections/LeadFormSection";
-import { FAQSection } from "@/components/sections/FAQSection";
-import { FinalCTASection } from "@/components/sections/FinalCTASection";
+
+const UnitsCardsSection = dynamic(
+  () => import("@/components/sections/UnitsCardsSection").then((m) => ({ default: m.UnitsCardsSection })),
+  { ssr: true }
+);
+const HighlightsSection = dynamic(
+  () => import("@/components/sections/HighlightsSection").then((m) => ({ default: m.HighlightsSection })),
+  { ssr: true }
+);
+const LocationSection = dynamic(
+  () => import("@/components/sections/LocationSection").then((m) => ({ default: m.LocationSection })),
+  { ssr: true }
+);
+const PricingSection = dynamic(
+  () => import("@/components/sections/PricingSection").then((m) => ({ default: m.PricingSection })),
+  { ssr: true }
+);
+const LeadFormSection = dynamic(
+  () => import("@/components/sections/LeadFormSection").then((m) => ({ default: m.LeadFormSection })),
+  { ssr: true }
+);
+const FAQSection = dynamic(
+  () => import("@/components/sections/FAQSection").then((m) => ({ default: m.FAQSection })),
+  { ssr: true }
+);
+const FinalCTASection = dynamic(
+  () => import("@/components/sections/FinalCTASection").then((m) => ({ default: m.FinalCTASection })),
+  { ssr: true }
+);
 
 interface LandingPageTemplateProps {
   project: ProjectContent;

@@ -80,6 +80,7 @@ function UnitCard({
               fill
               className="object-cover"
               sizes="(max-width: 640px) 50vw, 280px"
+              quality={82}
               onError={() => setImageError(true)}
             />
           ) : (
@@ -226,6 +227,7 @@ export function UnitsCardsSection({ project }: { project: ProjectContent }) {
                   fill
                   className="object-cover"
                   sizes="(max-width: 448px) 100vw, 448px"
+                  quality={82}
                   onError={() => setModalImageError(true)}
                 />
               ) : (

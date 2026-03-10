@@ -18,6 +18,11 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). Go to [http://localhost:3000/mountainview](http://localhost:3000/mountainview) for the first landing page.
 
+## Performance
+
+- Images are served as AVIF/WebP with optimized quality. Use Next.js `Image` with `sizes` and `quality={82}` for new assets.
+- Hero video uses `preload="metadata"` so the page loads fast; the video stream loads when playback starts. For even faster load, keep `public/hero-video.webm` under ~2–3 MB (e.g. re-encode with lower bitrate or shorter duration).
+
 ## Environment Variables
 
 In `.env.local` (and in Vercel for production):

@@ -5,6 +5,7 @@ import "./globals.css";
 const cairo = Cairo({
   variable: "--font-cairo",
   subsets: ["latin", "arabic"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
