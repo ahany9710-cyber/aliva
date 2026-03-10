@@ -1,7 +1,10 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getProjectBySlug, getAllProjectSlugs } from "@/content/projects";
+import { createServerClient } from "@/lib/supabase";
+import { getSearchParam } from "@/lib/utils";
 import { LandingPageTemplate } from "@/components/LandingPageTemplate";
+import { VisitTracker } from "@/components/analytics/VisitTracker";
 import type { NextSearchParams } from "@/types/next";
 
 interface PageProps {
@@ -45,5 +48,31 @@ export default async function ProjectPage({ params, searchParams }: PageProps) {
   const search = await searchParams;
   const project = getProjectBySlug(slug);
   if (!project) notFound();
-  return <LandingPageTemplate project={project} searchParams={search} />;
+
+  const supabase = createServerClient();
+  const { data: settingsRow } = await supabase
+    .from("page_settings")
+    .select("phone, whatsapp_number")
+    .eq("project_slug", slug)
+    .maybeSingle();
+
+  const settings = settingsRow as { phone: string | null; whatsapp_number: string | null } | null;
+  const phoneOverride = settings?.phone ?? undefined;
+  const whatsappOverride = settings?.whatsapp_number ?? undefined;
+
+  return (
+    <>
+      <VisitTracker
+        projectSlug={slug}
+        utmSource={getSearchParam(search?.utm_source)}
+        utmCampaign={getSearchParam(search?.utm_campaign)}
+      />
+      <LandingPageTemplate
+        project={project}
+        searchParams={search}
+        phoneOverride={phoneOverride}
+        whatsappOverride={whatsappOverride}
+      />
+    </>
+  );
 }

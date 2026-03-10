@@ -4,8 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { buildProjectWhatsAppUrl, buildWhatsAppUrl } from "@/lib/utils";
+import { trackClick } from "@/lib/analytics";
 
 interface MinimalHeaderProps {
+  projectSlug: string;
   projectName?: string;
   whatsappNumber: string;
   /** When set (e.g. for mountainview), show this logo instead of the Beitlee link and do not make it clickable. */
@@ -15,7 +17,7 @@ interface MinimalHeaderProps {
   overHero?: boolean;
 }
 
-export function MinimalHeader({ projectName, whatsappNumber, logoSrc, logoAlt, overHero }: MinimalHeaderProps) {
+export function MinimalHeader({ projectSlug, projectName, whatsappNumber, logoSrc, logoAlt, overHero }: MinimalHeaderProps) {
   const whatsappUrl = projectName
     ? buildProjectWhatsAppUrl({ whatsappNumber, projectName }, "inquiry")
     : buildWhatsAppUrl(whatsappNumber);
@@ -49,6 +51,7 @@ export function MinimalHeader({ projectName, whatsappNumber, logoSrc, logoAlt, o
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => trackClick(projectSlug, "header_whatsapp")}
           className="inline-flex items-center gap-2 rounded-xl bg-[#25D366] text-white px-4 py-2 text-sm font-medium hover:bg-[#20bd5a] transition-colors"
         >
           <MessageCircle size={18} aria-hidden />

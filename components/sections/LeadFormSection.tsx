@@ -12,6 +12,7 @@ import type { NextSearchParams } from "@/types/next";
 import type { LeadFormPayload } from "@/types/lead";
 import { isValidEgyptPhone, normalizeEgyptPhone } from "@/lib/validation";
 import { getSearchParam } from "@/lib/utils";
+import { trackClick } from "@/lib/analytics";
 import { fadeInUp } from "@/lib/motion";
 
 interface LeadFormSectionProps {
@@ -61,6 +62,7 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
         const data = await res.json().catch(() => ({}));
         throw new Error(data.message || "حدث خطأ، يرجى المحاولة لاحقاً");
       }
+      trackClick(project.slug, "lead_submit");
       router.push(`/thank-you?project=${encodeURIComponent(project.slug)}`);
     } catch (err) {
       setStatus("error");

@@ -40,37 +40,53 @@ const FinalCTASection = dynamic(
 interface LandingPageTemplateProps {
   project: ProjectContent;
   searchParams?: NextSearchParams;
+  /** Override from admin page_settings (call number). */
+  phoneOverride?: string;
+  /** Override from admin page_settings (WhatsApp number). */
+  whatsappOverride?: string;
 }
 
 /**
  * Single landing page layout: header, all sections in order, footer, sticky mobile CTA.
  * Used by the dynamic [slug] route — add new projects by adding content only.
  */
-export function LandingPageTemplate({ project, searchParams }: LandingPageTemplateProps) {
+export function LandingPageTemplate({
+  project,
+  searchParams,
+  phoneOverride,
+  whatsappOverride,
+}: LandingPageTemplateProps) {
+  const contactPhone = phoneOverride ?? project.whatsappNumber;
+  const contactWhatsapp = whatsappOverride ?? project.whatsappNumber;
+
   return (
     <>
       {project.slug === "mountainview" && (
         <WindowSplashScreen shutterImageSrc="/shutters.png" />
       )}
       <MinimalHeader
+        projectSlug={project.slug}
         projectName={project.projectName}
-        whatsappNumber={project.whatsappNumber}
+        whatsappNumber={contactWhatsapp}
         logoSrc={project.slug === "mountainview" ? "/Mountain View Logo.png" : undefined}
         logoAlt={project.slug === "mountainview" ? project.projectName : undefined}
         overHero={!!project.heroVideo}
       />
       <main className="pb-24 md:pb-0">
-        <HeroSection project={project} />
-        {project.slug === "mountainview" && <UnitsCardsSection project={project} />}
+        <HeroSection project={project} contactPhone={contactPhone} />
+        {project.slug === "mountainview" && (
+          <UnitsCardsSection project={project} contactPhone={contactPhone} contactWhatsapp={contactWhatsapp} />
+        )}
         <HighlightsSection project={project} />
         <LocationSection project={project} />
-        <PricingSection project={project} />
+        <PricingSection project={project} contactPhone={contactPhone} />
         <LeadFormSection project={project} searchParams={searchParams} />
         <FAQSection project={project} />
-        <FinalCTASection project={project} />
+        <FinalCTASection project={project} contactWhatsapp={contactWhatsapp} />
       </main>
       <StickyMobileCTA
-        whatsappNumber={project.whatsappNumber}
+        projectSlug={project.slug}
+        whatsappNumber={contactWhatsapp}
         ctaText={project.ctaText}
         projectName={project.projectName}
       />

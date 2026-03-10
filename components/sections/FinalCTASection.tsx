@@ -10,10 +10,16 @@ import type { ProjectContent } from "@/types/project";
 
 interface FinalCTASectionProps {
   project: ProjectContent;
+  /** Override for WhatsApp link (from admin page_settings). */
+  contactWhatsapp?: string;
 }
 
-export function FinalCTASection({ project }: FinalCTASectionProps) {
-  const whatsappUrl = buildProjectWhatsAppUrl(project, "booking");
+export function FinalCTASection({ project, contactWhatsapp }: FinalCTASectionProps) {
+  const whatsappNumber = contactWhatsapp ?? project.whatsappNumber;
+  const whatsappUrl = buildProjectWhatsAppUrl(
+    { ...project, whatsappNumber },
+    "booking"
+  );
 
   return (
     <SectionWrapper className="py-20">

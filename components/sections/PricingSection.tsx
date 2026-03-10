@@ -9,10 +9,13 @@ import type { ProjectContent } from "@/types/project";
 
 interface PricingSectionProps {
   project: ProjectContent;
+  /** Override for tel: link (from admin page_settings). */
+  contactPhone?: string;
 }
 
-export function PricingSection({ project }: PricingSectionProps) {
-  const callUrl = `tel:+${project.whatsappNumber.replace(/\D/g, "")}`;
+export function PricingSection({ project, contactPhone }: PricingSectionProps) {
+  const phone = contactPhone ?? project.whatsappNumber;
+  const callUrl = `tel:+${phone.replace(/\D/g, "")}`;
 
   return (
     <SectionWrapper id="pricing">

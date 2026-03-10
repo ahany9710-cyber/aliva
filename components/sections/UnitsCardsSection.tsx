@@ -109,7 +109,15 @@ const UNIT_TITLES: Record<number, string> = {
   3: "تاون هاوس",
 };
 
-export function UnitsCardsSection({ project }: { project: ProjectContent }) {
+interface UnitsCardsSectionProps {
+  project: ProjectContent;
+  contactPhone?: string;
+  contactWhatsapp?: string;
+}
+
+export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: UnitsCardsSectionProps) {
+  const phone = contactPhone ?? project.whatsappNumber;
+  const whatsapp = contactWhatsapp ?? project.whatsappNumber;
   const scrollRef = useRef<HTMLDivElement>(null);
   const [selectedUnit, setSelectedUnit] = useState<number | null>(null);
   const [modalImageError, setModalImageError] = useState(false);
@@ -145,9 +153,9 @@ export function UnitsCardsSection({ project }: { project: ProjectContent }) {
     unit &&
     `مرحباً، أريد الاستفسار عن الوحدة: ${UNIT_TITLES[selectedUnit as number]} - المشروع ${unit.project}`;
   const whatsappUrl = project
-    ? buildWhatsAppUrl(project.whatsappNumber, whatsappMessage ?? undefined)
+    ? buildWhatsAppUrl(whatsapp, whatsappMessage ?? undefined)
     : "#";
-  const telUrl = project ? `tel:+${project.whatsappNumber.replace(/\D/g, "")}` : "#";
+  const telUrl = project ? `tel:+${phone.replace(/\D/g, "")}` : "#";
 
   return (
     <SectionWrapper id="units" className="py-12 md:py-16">

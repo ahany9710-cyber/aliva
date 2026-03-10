@@ -9,12 +9,15 @@ import type { ProjectContent } from "@/types/project";
 
 interface HeroSectionProps {
   project: ProjectContent;
+  /** Override for tel: link (from admin page_settings). */
+  contactPhone?: string;
 }
 
 const HEADER_HEIGHT = 56; // h-14 = 3.5rem
 
-export function HeroSection({ project }: HeroSectionProps) {
-  const callUrl = `tel:+${project.whatsappNumber.replace(/\D/g, "")}`;
+export function HeroSection({ project, contactPhone }: HeroSectionProps) {
+  const phone = contactPhone ?? project.whatsappNumber;
+  const callUrl = `tel:+${phone.replace(/\D/g, "")}`;
   const hasVideo = !!project.heroVideo;
 
   if (hasVideo) {
@@ -67,7 +70,7 @@ export function HeroSection({ project }: HeroSectionProps) {
                 </Button>
               </a>
               <a href="#lead-form" className="inline-flex items-center gap-2">
-                <Button variant="outline" size="lg" className="gap-2">
+                <Button variant="secondary" size="lg" className="gap-2">
                   <MessageSquare size={18} aria-hidden />
                   اطلب استشارة
                 </Button>
@@ -105,7 +108,7 @@ export function HeroSection({ project }: HeroSectionProps) {
               </Button>
             </a>
             <a href="#lead-form" className="inline-flex items-center gap-2">
-              <Button variant="outline" size="lg" className="gap-2">
+              <Button variant="secondary" size="lg" className="gap-2">
                 <MessageSquare size={18} aria-hidden />
                 اطلب استشارة
               </Button>
