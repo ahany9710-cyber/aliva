@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import type { ProjectContent } from "@/types/project";
 import type { NextSearchParams } from "@/types/next";
 import { MinimalHeader } from "@/components/layout/MinimalHeader";
+import { MinimalFooter } from "@/components/layout/MinimalFooter";
 import { StickyMobileCTA } from "@/components/layout/StickyMobileCTA";
 import { WindowSplashScreen } from "@/components/WindowSplashScreen";
 import { HeroSection } from "@/components/sections/HeroSection";
@@ -84,6 +85,7 @@ export function LandingPageTemplate({
         <FAQSection project={project} />
         <FinalCTASection project={project} contactWhatsapp={contactWhatsapp} />
       </main>
+      <MinimalFooter />
       <StickyMobileCTA
         projectSlug={project.slug}
         whatsappNumber={contactWhatsapp}

@@ -1,3 +1,4 @@
+import { FileStack } from "lucide-react";
 import { createServerClient } from "@/lib/supabase";
 import { getAllProjectSlugs, getProjectBySlug } from "@/content/projects";
 import { PageSettingsForm } from "./PageSettingsForm";
@@ -16,9 +17,12 @@ export default async function AdminPagesPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-navy mb-6">الصفحات — هاتف و واتساب</h1>
+      <h1 className="flex items-center gap-2 text-2xl font-bold text-navy mb-6">
+        <FileStack size={28} className="text-slate-600 shrink-0" aria-hidden />
+        Pages — Phone & WhatsApp
+      </h1>
       <p className="text-muted text-sm mb-6">
-        يمكنك تغيير رقم الهاتف ورقم واتساب لكل صفحة. إن تركت الحقل فارغاً، يُستخدم الرقم الافتراضي من المحتوى.
+        Change the phone and WhatsApp number for each page. Leave a field empty to use the default from content.
       </p>
       <div className="space-y-6">
         {slugs.map((slug) => {
@@ -27,7 +31,10 @@ export default async function AdminPagesPage() {
           const defaultNumber = project?.whatsappNumber ?? "";
           return (
             <div key={slug}>
-              <h2 className="text-lg font-semibold text-navy mb-2">{slug}</h2>
+              <h2 className="flex items-center gap-2 text-lg font-semibold text-navy mb-2">
+                <FileStack size={18} className="text-slate-500 shrink-0" aria-hidden />
+                {slug}
+              </h2>
               <PageSettingsForm
                 projectSlug={slug}
                 defaultPhone={defaultNumber}

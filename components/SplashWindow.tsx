@@ -98,7 +98,7 @@ export function SplashWindow({ children, skipSplash = false }: SplashWindowProps
                     transition={{ delay: 0.5, duration: 0.4 }}
                     className="text-xl font-bold text-navy md:text-2xl"
                   >
-                    Mountain View iCity
+                    Mountain View Aliva
                   </motion.span>
                   <motion.span
                     initial={{ opacity: 0 }}

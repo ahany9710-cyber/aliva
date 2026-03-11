@@ -1,11 +1,20 @@
+import { Suspense } from "react";
+import { BarChart3, Eye, MousePointerClick, MessageCircle, Phone, LayoutPanelTop, Send } from "lucide-react";
 import { createServerClient } from "@/lib/supabase";
+import { parsePeriod, getDateRangeForPeriod, getPeriodLabel } from "@/lib/admin-period";
+import { PeriodSelector } from "../PeriodSelector";
 
-export default async function AdminAnalyticsPage() {
+interface PageProps {
+  searchParams: Promise<{ period?: string }>;
+}
+
+export default async function AdminAnalyticsPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const period = parsePeriod(params.period ?? null);
+  const { fromIso } = getDateRangeForPeriod(period);
+  const periodLabel = getPeriodLabel(period);
+
   const supabase = createServerClient();
-
-  const thirtyDaysAgo = new Date();
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-  const fromIso = thirtyDaysAgo.toISOString();
 
   const { data: visitsData } = await supabase
     .from("page_visits")
@@ -40,25 +49,36 @@ export default async function AdminAnalyticsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-navy mb-6">التحليلات</h1>
-      <p className="text-muted text-sm mb-6">آخر ٣٠ يوماً — زيارات الصفحات ونقرات الأزرار.</p>
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <h1 className="flex items-center gap-2 text-2xl font-bold text-navy">
+          <BarChart3 size={28} className="text-emerald-600 shrink-0" aria-hidden />
+          Analytics
+        </h1>
+        <Suspense fallback={<div className="h-9 w-32 rounded-lg bg-navy/10 animate-pulse" />}>
+          <PeriodSelector />
+        </Suspense>
+      </div>
+      <p className="text-muted text-sm mb-6">{periodLabel} — page visits and button clicks.</p>
 
       <section className="mb-10">
-        <h2 className="text-lg font-semibold text-navy mb-4">زيارات الصفحات (حسب اليوم)</h2>
+        <h2 className="flex items-center gap-2 text-lg font-semibold text-navy mb-4">
+          <Eye size={20} className="text-sky-500 shrink-0" aria-hidden />
+          Page visits (by day)
+        </h2>
         <div className="rounded-xl border border-navy/10 bg-white overflow-x-auto">
-          <table className="w-full text-right min-w-[400px]">
+          <table className="w-full text-left min-w-[400px]">
             <thead className="bg-navy/5 border-b border-navy/10">
               <tr>
-                <th className="px-4 py-3 text-sm font-semibold text-navy">المشروع</th>
-                <th className="px-4 py-3 text-sm font-semibold text-navy">التاريخ</th>
-                <th className="px-4 py-3 text-sm font-semibold text-navy">العدد</th>
+                <th className="px-4 py-3 text-sm font-semibold text-navy">Project</th>
+                <th className="px-4 py-3 text-sm font-semibold text-navy">Date</th>
+                <th className="px-4 py-3 text-sm font-semibold text-navy">Count</th>
               </tr>
             </thead>
             <tbody>
               {slugOrder.length === 0 ? (
                 <tr>
                   <td colSpan={3} className="px-4 py-8 text-center text-muted">
-                    لا توجد زيارات حتى الآن.
+                    No visits yet.
                   </td>
                 </tr>
               ) : (
@@ -82,23 +102,34 @@ export default async function AdminAnalyticsPage() {
       </section>
 
       <section>
-        <h2 className="text-lg font-semibold text-navy mb-4">نقرات الأزرار (حسب المشروع والنوع)</h2>
+        <h2 className="flex items-center gap-2 text-lg font-semibold text-navy mb-4">
+          <MousePointerClick size={20} className="text-violet-500 shrink-0" aria-hidden />
+          Button clicks (by project and type)
+        </h2>
         <div className="rounded-xl border border-navy/10 bg-white overflow-x-auto">
-          <table className="w-full text-right min-w-[400px]">
+          <table className="w-full text-left min-w-[400px]">
             <thead className="bg-navy/5 border-b border-navy/10">
               <tr>
-                <th className="px-4 py-3 text-sm font-semibold text-navy">المشروع</th>
-                <th className="px-4 py-3 text-sm font-semibold text-navy">زر واتساب (ستيكي)</th>
-                <th className="px-4 py-3 text-sm font-semibold text-navy">زر اتصال</th>
-                <th className="px-4 py-3 text-sm font-semibold text-navy">واتساب الهيدر</th>
-                <th className="px-4 py-3 text-sm font-semibold text-navy">إرسال النموذج</th>
+                <th className="px-4 py-3 text-sm font-semibold text-navy">Project</th>
+                <th className="px-4 py-3 text-sm font-semibold text-navy">
+                  <span className="inline-flex items-center gap-1"><MessageCircle size={14} className="text-green-500 shrink-0" aria-hidden /> WhatsApp (sticky)</span>
+                </th>
+                <th className="px-4 py-3 text-sm font-semibold text-navy">
+                  <span className="inline-flex items-center gap-1"><Phone size={14} className="text-blue-500 shrink-0" aria-hidden /> Call</span>
+                </th>
+                <th className="px-4 py-3 text-sm font-semibold text-navy">
+                  <span className="inline-flex items-center gap-1"><LayoutPanelTop size={14} className="text-slate-500 shrink-0" aria-hidden /> WhatsApp (header)</span>
+                </th>
+                <th className="px-4 py-3 text-sm font-semibold text-navy">
+                  <span className="inline-flex items-center gap-1"><Send size={14} className="text-amber-500 shrink-0" aria-hidden /> Form submit</span>
+                </th>
               </tr>
             </thead>
             <tbody>
               {slugOrder.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-4 py-8 text-center text-muted">
-                    لا توجد نقرات حتى الآن.
+                    No clicks yet.
                   </td>
                 </tr>
               ) : (

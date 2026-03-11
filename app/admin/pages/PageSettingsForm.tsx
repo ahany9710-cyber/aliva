@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Phone, MessageCircle, Save, Loader2, Check, AlertCircle } from "lucide-react";
 
 interface PageSettingsFormProps {
   projectSlug: string;
@@ -48,7 +49,10 @@ export function PageSettingsForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-wrap items-end gap-4 p-4 rounded-xl border border-navy/10 bg-white">
       <div className="min-w-[140px]">
-        <label className="block text-sm font-medium text-navy mb-1">هاتف (اتصال)</label>
+        <label className="flex items-center gap-2 text-sm font-medium text-navy mb-1">
+          <Phone size={16} className="text-blue-600 shrink-0" aria-hidden />
+          Phone (call)
+        </label>
         <input
           type="text"
           value={phone}
@@ -58,7 +62,10 @@ export function PageSettingsForm({
         />
       </div>
       <div className="min-w-[140px]">
-        <label className="block text-sm font-medium text-navy mb-1">واتساب</label>
+        <label className="flex items-center gap-2 text-sm font-medium text-navy mb-1">
+          <MessageCircle size={16} className="text-green-500 shrink-0" aria-hidden />
+          WhatsApp
+        </label>
         <input
           type="text"
           value={whatsapp}
@@ -70,11 +77,23 @@ export function PageSettingsForm({
       <button
         type="submit"
         disabled={status === "loading"}
-        className="rounded-lg bg-gold text-white px-4 py-2 text-sm font-medium hover:opacity-90 disabled:opacity-60"
+        className="flex items-center gap-2 rounded-lg bg-gold text-white px-4 py-2 text-sm font-medium hover:opacity-90 disabled:opacity-60"
       >
-        {status === "loading" ? "جاري الحفظ…" : status === "saved" ? "تم الحفظ" : "حفظ"}
+        {status === "loading" ? (
+          <Loader2 size={16} className="animate-spin text-white shrink-0" aria-hidden />
+        ) : status === "saved" ? (
+          <Check size={16} className="text-white shrink-0" aria-hidden />
+        ) : (
+          <Save size={16} className="text-white shrink-0" aria-hidden />
+        )}
+        {status === "loading" ? "Saving…" : status === "saved" ? "Saved" : "Save"}
       </button>
-      {status === "error" && <span className="text-sm text-red-600">حدث خطأ</span>}
+      {status === "error" && (
+        <span className="flex items-center gap-1 text-sm text-red-600">
+          <AlertCircle size={14} className="text-red-600 shrink-0" aria-hidden />
+          Error
+        </span>
+      )}
     </form>
   );
 }

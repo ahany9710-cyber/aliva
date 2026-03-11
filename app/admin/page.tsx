@@ -1,27 +1,36 @@
+import { Suspense } from "react";
+import { LayoutDashboard, Users, UserPlus, Eye, MousePointerClick, TrendingUp } from "lucide-react";
 import { createServerClient } from "@/lib/supabase";
+import { parsePeriod, getDateRangeForPeriod, getPeriodLabel } from "@/lib/admin-period";
+import { PeriodSelector } from "./PeriodSelector";
 
-export default async function AdminDashboardPage() {
+interface PageProps {
+  searchParams: Promise<{ period?: string }>;
+}
+
+export default async function AdminDashboardPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const period = parsePeriod(params.period ?? null);
+  const { fromIso } = getDateRangeForPeriod(period);
+  const periodLabel = getPeriodLabel(period);
+
   const supabase = createServerClient();
-
-  const now = new Date();
-  const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-  const weekAgoIso = weekAgo.toISOString();
 
   const [
     { count: totalLeads },
-    { count: leadsThisWeek },
-    { count: visitsThisWeek },
-    { count: clicksThisWeek },
+    { count: leadsInPeriod },
+    { count: visitsInPeriod },
+    { count: clicksInPeriod },
     topProjectSlug,
   ] = await Promise.all([
     supabase.from("leads").select("*", { count: "exact", head: true }),
-    supabase.from("leads").select("*", { count: "exact", head: true }).gte("created_at", weekAgoIso),
-    supabase.from("page_visits").select("*", { count: "exact", head: true }).gte("visited_at", weekAgoIso),
-    supabase.from("button_clicks").select("*", { count: "exact", head: true }).gte("clicked_at", weekAgoIso),
+    supabase.from("leads").select("*", { count: "exact", head: true }).gte("created_at", fromIso),
+    supabase.from("page_visits").select("*", { count: "exact", head: true }).gte("visited_at", fromIso),
+    supabase.from("button_clicks").select("*", { count: "exact", head: true }).gte("clicked_at", fromIso),
     supabase
       .from("page_visits")
       .select("project_slug")
-      .gte("visited_at", weekAgoIso)
+      .gte("visited_at", fromIso)
       .then((r) => {
         if (!r.data?.length) return null;
         const counts: Record<string, number> = {};
@@ -34,29 +43,43 @@ export default async function AdminDashboardPage() {
   ]);
 
   const stats = [
-    { label: "إجمالي العملاء المحتملين", value: totalLeads ?? 0 },
-    { label: "عملاء محتملون (آخر ٧ أيام)", value: leadsThisWeek ?? 0 },
-    { label: "زيارات الصفحات (آخر ٧ أيام)", value: visitsThisWeek ?? 0 },
-    { label: "نقرات الأزرار (آخر ٧ أيام)", value: clicksThisWeek ?? 0 },
-  ];
+    { label: "Total leads", value: totalLeads ?? 0, icon: Users, iconClass: "text-blue-600" },
+    { label: `Leads (${periodLabel})`, value: leadsInPeriod ?? 0, icon: UserPlus, iconClass: "text-emerald-600" },
+    { label: `Page visits (${periodLabel})`, value: visitsInPeriod ?? 0, icon: Eye, iconClass: "text-sky-500" },
+    { label: `Button clicks (${periodLabel})`, value: clicksInPeriod ?? 0, icon: MousePointerClick, iconClass: "text-violet-500" },
+  ] as const;
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-navy mb-6">لوحة التحكم</h1>
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <h1 className="flex items-center gap-2 text-2xl font-bold text-navy">
+          <LayoutDashboard size={28} className="text-gold shrink-0" aria-hidden />
+          Dashboard
+        </h1>
+        <Suspense fallback={<div className="h-9 w-32 rounded-lg bg-navy/10 animate-pulse" />}>
+          <PeriodSelector />
+        </Suspense>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {stats.map(({ label, value }) => (
+        {stats.map(({ label, value, icon: Icon, iconClass }) => (
           <div
             key={label}
             className="rounded-xl border border-navy/10 bg-white p-5 shadow-sm"
           >
-            <p className="text-sm text-muted mb-1">{label}</p>
+            <p className="flex items-center gap-2 text-sm text-muted mb-1">
+              <Icon size={16} className={`shrink-0 ${iconClass}`} aria-hidden />
+              {label}
+            </p>
             <p className="text-2xl font-bold text-navy">{value}</p>
           </div>
         ))}
       </div>
       {topProjectSlug && (
         <div className="rounded-xl border border-navy/10 bg-white p-5 shadow-sm">
-          <p className="text-sm text-muted mb-1">الأكثر زيارة (آخر ٧ أيام)</p>
+          <p className="flex items-center gap-2 text-sm text-muted mb-1">
+            <TrendingUp size={16} className="text-emerald-600 shrink-0" aria-hidden />
+            Most visited ({periodLabel})
+          </p>
           <p className="text-lg font-semibold text-navy">{topProjectSlug}</p>
         </div>
       )}

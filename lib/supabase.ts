@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { createServerClient as createSsrClientFromPackage } from "@supabase/ssr";
+import { createBrowserClient as createBrowserClientFromPackage, createServerClient as createSsrClientFromPackage } from "@supabase/ssr";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
@@ -31,13 +31,14 @@ export function createSsrClient(cookieStore: CookieStore): SupabaseClient {
 }
 
 /**
- * Browser-safe client (publishable key). Use for client-side if needed.
+ * Browser client (publishable key). Uses cookies so middleware and server can read the session.
+ * Use in Client Components (e.g. admin login).
  */
 export function createBrowserClient() {
   if (!supabaseUrl || !supabasePublishableKey) {
     throw new Error("Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY");
   }
-  return createClient(supabaseUrl, supabasePublishableKey);
+  return createBrowserClientFromPackage(supabaseUrl, supabasePublishableKey);
 }
 
 let serverClient: SupabaseClient | null = null;

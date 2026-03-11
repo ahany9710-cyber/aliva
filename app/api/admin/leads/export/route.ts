@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
 import { requireAdminSession } from "@/lib/admin-auth";
+import { parsePeriod, getDateRangeForPeriod } from "@/lib/admin-period";
 
 function escapeCsv(value: string | null | undefined): string {
   if (value == null) return "";
@@ -16,9 +17,15 @@ export async function GET(request: NextRequest) {
   if (session instanceof NextResponse) return session;
 
   const projectSlug = request.nextUrl.searchParams.get("project_slug")?.trim() ?? null;
+  const period = parsePeriod(request.nextUrl.searchParams.get("period") ?? null);
+  const { fromIso } = getDateRangeForPeriod(period);
 
   const supabase = createServerClient();
-  let query = supabase.from("leads").select("*").order("created_at", { ascending: false });
+  let query = supabase
+    .from("leads")
+    .select("*")
+    .gte("created_at", fromIso)
+    .order("created_at", { ascending: false });
   if (projectSlug) {
     query = query.eq("project_slug", projectSlug);
   }
