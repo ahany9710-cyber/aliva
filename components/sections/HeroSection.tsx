@@ -42,6 +42,7 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
       >
         {/* Full-bleed video behind header and hero */}
         <div className="absolute inset-0 z-0">
+          {/* fetchPriority is valid for LCP but not in React's VideoHTMLAttributes; suppresses TS error */}
           <video
             ref={videoRef}
             poster="/hero-poster.avif"
@@ -50,6 +51,8 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
             loop
             playsInline
             preload="auto"
+            // @ts-expect-error - fetchpriority is valid on video for LCP; React types are incomplete
+            fetchPriority="high"
             className="absolute inset-0 h-full w-full object-cover"
             aria-label={project.projectName}
           >
