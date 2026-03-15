@@ -21,17 +21,62 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
   const callUrl = `tel:+${phone.replace(/\D/g, "")}`;
   const hasVideo = !!project.heroVideo;
   const videoRef = useRef<HTMLVideoElement>(null);
+  const playAttemptedByUserRef = useRef(false);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !hasVideo) return;
-    const play = () => {
+
+    video.setAttribute("webkit-playsinline", "true");
+
+    const tryPlay = () => {
       video.muted = true;
       video.play().catch(() => {});
     };
-    play();
-    video.addEventListener("canplay", play);
-    return () => video.removeEventListener("canplay", play);
+
+    tryPlay();
+
+    const events: (keyof HTMLMediaElementEventMap)[] = [
+      "loadedmetadata",
+      "loadeddata",
+      "canplay",
+      "canplaythrough",
+    ];
+    const handlers = events.map((ev) => {
+      const fn = () => tryPlay();
+      video.addEventListener(ev, fn);
+      return () => video.removeEventListener(ev, fn);
+    });
+
+    const onVisible = () => tryPlay();
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("pageshow", onVisible);
+
+    return () => {
+      handlers.forEach((cleanup) => cleanup());
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("pageshow", onVisible);
+    };
+  }, [hasVideo]);
+
+  // On mobile, autoplay is often blocked until there's a user gesture. Start play on first touch/click.
+  useEffect(() => {
+    if (!hasVideo) return;
+    const video = videoRef.current;
+    const onUserGesture = () => {
+      if (playAttemptedByUserRef.current || !video) return;
+      playAttemptedByUserRef.current = true;
+      video.muted = true;
+      video.play().catch(() => {});
+      document.removeEventListener("touchstart", onUserGesture, { capture: true });
+      document.removeEventListener("click", onUserGesture, { capture: true });
+    };
+    document.addEventListener("touchstart", onUserGesture, { capture: true, once: false });
+    document.addEventListener("click", onUserGesture, { capture: true, once: false });
+    return () => {
+      document.removeEventListener("touchstart", onUserGesture, { capture: true });
+      document.removeEventListener("click", onUserGesture, { capture: true });
+    };
   }, [hasVideo]);
 
   if (hasVideo) {
