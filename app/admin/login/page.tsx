@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Mail, Lock, LogIn, ArrowLeft, Shield } from "lucide-react";
 import { createBrowserClient } from "@/lib/supabase";
 
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -22,13 +20,14 @@ export default function AdminLoginPage() {
       const { error: err } = await supabase.auth.signInWithPassword({ email, password });
       if (err) {
         setError(err.message);
-        setLoading(false);
         return;
       }
-      router.push("/admin");
-      router.refresh();
+      // Full page redirect so the next request includes session cookies; avoids
+      // middleware not seeing the session after client-side router.push.
+      window.location.href = "/admin";
     } catch {
       setError("Something went wrong. Please try again.");
+    } finally {
       setLoading(false);
     }
   }
