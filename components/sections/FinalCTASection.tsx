@@ -1,11 +1,11 @@
 "use client";
 
 import { MessageCircle, MessageSquare } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Button } from "@/components/ui/Button";
 import { buildProjectWhatsAppUrl } from "@/lib/utils";
-import { fadeInUp } from "@/lib/motion";
+import { fadeInUp, noMotion } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
 
 interface FinalCTASectionProps {
@@ -20,13 +20,15 @@ export function FinalCTASection({ project, contactWhatsapp }: FinalCTASectionPro
     { ...project, whatsappNumber },
     "booking"
   );
+  const reducedMotion = useReducedMotion();
+  const sectionVariants = reducedMotion ? noMotion : fadeInUp;
 
   return (
     <SectionWrapper className="py-20">
       <motion.div
-        initial={fadeInUp.initial}
-        whileInView={fadeInUp.animate}
-        viewport={fadeInUp.viewport}
+        initial={sectionVariants.initial}
+        whileInView={sectionVariants.animate}
+        viewport={sectionVariants.viewport}
         className="max-w-2xl mx-auto text-center p-10 rounded-2xl bg-navy text-white"
       >
         <h2 className="text-2xl font-bold mb-3">
@@ -42,7 +44,11 @@ export function FinalCTASection({ project, contactWhatsapp }: FinalCTASectionPro
               size="lg"
               className="gap-2 bg-gold hover:bg-amber-500 text-white border-0"
             >
-              <MessageCircle size={18} aria-hidden />
+              {project.slug === "mountainview" ? (
+                <img src="/mountainview-emblem-white.png" alt="" aria-hidden className="w-7 h-7 object-contain" />
+              ) : (
+                <MessageCircle size={18} aria-hidden />
+              )}
               تواصل عبر واتساب
             </Button>
           </a>
@@ -52,7 +58,11 @@ export function FinalCTASection({ project, contactWhatsapp }: FinalCTASectionPro
               size="lg"
               className="gap-2 border-2 border-white text-white hover:bg-white hover:text-navy"
             >
-              <MessageSquare size={18} aria-hidden />
+              {project.slug === "mountainview" ? (
+                <img src="/mountainview-emblem-white.png" alt="" aria-hidden className="w-7 h-7 object-contain" />
+              ) : (
+                <MessageSquare size={18} aria-hidden />
+              )}
               اطلب استشارة
             </Button>
           </a>

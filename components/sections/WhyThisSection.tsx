@@ -1,8 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
-import { fadeInUp } from "@/lib/motion";
+import { fadeInUp, noMotion } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
 
 interface WhyThisSectionProps {
@@ -10,12 +10,15 @@ interface WhyThisSectionProps {
 }
 
 export function WhyThisSection({ project }: WhyThisSectionProps) {
+  const reducedMotion = useReducedMotion();
+  const sectionVariants = reducedMotion ? noMotion : fadeInUp;
+
   return (
     <SectionWrapper id="why-this-project">
       <motion.h2
-        initial={fadeInUp.initial}
-        whileInView={fadeInUp.animate}
-        viewport={fadeInUp.viewport}
+        initial={sectionVariants.initial}
+        whileInView={sectionVariants.animate}
+        viewport={sectionVariants.viewport}
         className="text-2xl font-bold text-navy mb-10 text-center"
       >
         لماذا تختار {project.projectName}؟
@@ -24,9 +27,9 @@ export function WhyThisSection({ project }: WhyThisSectionProps) {
         {project.whyPoints.map((point, i) => (
           <motion.article
             key={point.title}
-            initial={fadeInUp.initial}
-            whileInView={fadeInUp.animate}
-            viewport={fadeInUp.viewport}
+            initial={sectionVariants.initial}
+            whileInView={sectionVariants.animate}
+            viewport={sectionVariants.viewport}
             transition={{ delay: i * 0.05 }}
             className="p-6 rounded-2xl bg-white border border-navy/10 shadow-sm"
           >

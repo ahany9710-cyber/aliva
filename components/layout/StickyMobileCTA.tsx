@@ -32,7 +32,11 @@ export function StickyMobileCTA({
           onClick={() => trackClick(projectSlug, "cta_whatsapp")}
           className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] text-white py-3 px-4 font-medium text-sm hover:bg-[#20bd5a] transition-colors"
         >
-          <MessageCircle size={18} aria-hidden />
+          {projectSlug === "mountainview" ? (
+            <img src="/mountainview-emblem-white.png" alt="" aria-hidden className="w-7 h-7 object-contain" />
+          ) : (
+            <MessageCircle size={18} aria-hidden />
+          )}
           WhatsApp
         </a>
         <a
@@ -40,7 +44,11 @@ export function StickyMobileCTA({
           onClick={() => trackClick(projectSlug, "cta_call")}
           className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-gold text-white py-3 px-4 font-medium text-sm shadow-md hover:opacity-90 transition-opacity"
         >
-          <Phone size={18} aria-hidden />
+          {projectSlug === "mountainview" ? (
+            <img src="/mountainview-emblem-white.png" alt="" aria-hidden className="w-7 h-7 object-contain" />
+          ) : (
+            <Phone size={18} aria-hidden />
+          )}
           {ctaText}
         </a>
       </div>

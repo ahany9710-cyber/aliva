@@ -17,6 +17,10 @@ const HighlightsSection = dynamic(
   () => import("@/components/sections/HighlightsSection").then((m) => ({ default: m.HighlightsSection })),
   { ssr: true }
 );
+const WhyThisSection = dynamic(
+  () => import("@/components/sections/WhyThisSection").then((m) => ({ default: m.WhyThisSection })),
+  { ssr: true }
+);
 const LocationSection = dynamic(
   () => import("@/components/sections/LocationSection").then((m) => ({ default: m.LocationSection })),
   { ssr: true }
@@ -69,6 +73,7 @@ export function LandingPageTemplate({
         projectSlug={project.slug}
         projectName={project.projectName}
         whatsappNumber={contactWhatsapp}
+        whatsappInquiryMessage={project.whatsappInquiryMessage}
         logoSrc={project.slug === "mountainview" ? "/Mountain View Logo.png" : undefined}
         logoAlt={project.slug === "mountainview" ? project.projectName : undefined}
         overHero={!!project.heroVideo}
@@ -79,6 +84,7 @@ export function LandingPageTemplate({
           <UnitsCardsSection project={project} contactPhone={contactPhone} contactWhatsapp={contactWhatsapp} />
         )}
         <HighlightsSection project={project} />
+        <WhyThisSection project={project} />
         <LocationSection project={project} />
         <PricingSection project={project} contactPhone={contactPhone} />
         <LeadFormSection project={project} searchParams={searchParams} />

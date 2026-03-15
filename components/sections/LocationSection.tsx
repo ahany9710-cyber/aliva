@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { Map, X, Maximize2 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Map, MapPin, X, Maximize2 } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
-import { fadeInUp } from "@/lib/motion";
+import { fadeInUp, noMotion } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
 
 interface LocationSectionProps {
@@ -62,12 +62,13 @@ function MasterplanModal({ onClose }: { onClose: () => void }) {
 
         {/* image — smooth scroll on iOS */}
         <div className="flex-1 min-h-0 overflow-x-hidden overflow-y-auto overscroll-contain bg-navy/5 [-webkit-overflow-scrolling:touch]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src="/Map.png"
             alt="Masterplan"
-            draggable={false}
+            width={1200}
+            height={800}
             className="block w-full h-auto"
+            quality={75}
           />
         </div>
       </motion.div>
@@ -78,13 +79,15 @@ function MasterplanModal({ onClose }: { onClose: () => void }) {
 
 export function LocationSection({ project }: LocationSectionProps) {
   const [masterplanOpen, setMasterplanOpen] = useState(false);
+  const reducedMotion = useReducedMotion();
+  const sectionVariants = reducedMotion ? noMotion : fadeInUp;
 
   return (
     <SectionWrapper id="location" className="bg-white rounded-2xl shadow-sm">
       <motion.h2
-        initial={fadeInUp.initial}
-        whileInView={fadeInUp.animate}
-        viewport={fadeInUp.viewport}
+        initial={sectionVariants.initial}
+        whileInView={sectionVariants.animate}
+        viewport={sectionVariants.viewport}
         className="text-2xl font-bold text-navy mb-6 flex items-center gap-2"
       >
         <Map size={24} className="text-gold shrink-0" aria-hidden />
@@ -110,10 +113,29 @@ export function LocationSection({ project }: LocationSectionProps) {
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
           <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 text-navy text-sm font-medium px-4 py-2 rounded-full flex items-center gap-2">
             <Maximize2 size={16} />
-            Masterplan
+            عرض الخريطة
           </span>
         </div>
       </button>
+
+      {project.nearbyPlaces && project.nearbyPlaces.length > 0 && (
+        <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3" aria-label="أماكن قريبة">
+          {project.nearbyPlaces.map((place) => (
+            <li
+              key={place.name}
+              className="flex items-center gap-3 p-3 rounded-xl border border-navy/10 bg-background"
+            >
+              <span className="shrink-0 text-gold" aria-hidden>
+                <MapPin size={20} strokeWidth={1.8} />
+              </span>
+              <div>
+                <span className="font-medium text-navy text-base">{place.name}</span>
+                <span className="text-muted text-base block mt-0.5">{place.distance}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
 
       <AnimatePresence>
         {masterplanOpen && (

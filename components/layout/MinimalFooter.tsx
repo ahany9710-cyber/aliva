@@ -12,7 +12,7 @@ export function MinimalFooter() {
             rel="noopener noreferrer"
             className="text-navy hover:underline"
           >
-            The Martining Invoation Studio
+            The Martining Innovation Studio
           </a>
         </p>
       </div>

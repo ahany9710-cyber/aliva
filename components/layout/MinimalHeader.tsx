@@ -10,6 +10,8 @@ interface MinimalHeaderProps {
   projectSlug: string;
   projectName?: string;
   whatsappNumber: string;
+  /** Optional custom pre-filled message for the WhatsApp link. When set, overrides the default inquiry message. */
+  whatsappInquiryMessage?: string;
   /** When set (e.g. for mountainview), show this logo instead of the Beitlee link and do not make it clickable. */
   logoSrc?: string;
   logoAlt?: string;
@@ -17,10 +19,12 @@ interface MinimalHeaderProps {
   overHero?: boolean;
 }
 
-export function MinimalHeader({ projectSlug, projectName, whatsappNumber, logoSrc, logoAlt, overHero }: MinimalHeaderProps) {
-  const whatsappUrl = projectName
-    ? buildProjectWhatsAppUrl({ whatsappNumber, projectName }, "inquiry")
-    : buildWhatsAppUrl(whatsappNumber);
+export function MinimalHeader({ projectSlug, projectName, whatsappNumber, whatsappInquiryMessage, logoSrc, logoAlt, overHero }: MinimalHeaderProps) {
+  const whatsappUrl = whatsappInquiryMessage
+    ? buildWhatsAppUrl(whatsappNumber, whatsappInquiryMessage)
+    : projectName
+      ? buildProjectWhatsAppUrl({ whatsappNumber, projectName }, "inquiry")
+      : buildWhatsAppUrl(whatsappNumber);
 
   return (
     <header
@@ -39,7 +43,6 @@ export function MinimalHeader({ projectSlug, projectName, whatsappNumber, logoSr
               width={120}
               height={32}
               className="h-8 w-auto object-contain object-left"
-              unoptimized
             />
           </span>
         ) : (
@@ -52,9 +55,20 @@ export function MinimalHeader({ projectSlug, projectName, whatsappNumber, logoSr
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => trackClick(projectSlug, "header_whatsapp")}
-          className="inline-flex items-center gap-2 rounded-xl bg-[#25D366] text-white px-4 py-2 text-sm font-medium hover:bg-[#20bd5a] transition-colors"
+          className="inline-flex items-center gap-2 rounded-xl bg-[#25D366] text-white px-4 py-2 text-base font-medium hover:bg-[#20bd5a] transition-colors"
         >
-          <MessageCircle size={18} aria-hidden />
+          {projectSlug === "mountainview" ? (
+            <Image
+              src="/mountainview-emblem-white.png"
+              alt=""
+              width={18}
+              height={18}
+              className="shrink-0 object-contain"
+              aria-hidden
+            />
+          ) : (
+            <MessageCircle size={18} aria-hidden />
+          )}
           <span>WhatsApp</span>
         </a>
       </div>

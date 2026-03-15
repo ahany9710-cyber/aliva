@@ -90,10 +90,10 @@ function UnitCard({
           )}
         </div>
         <div className="p-3 sm:p-4 md:p-6">
-          <p className="font-semibold text-navy text-sm sm:text-base md:text-lg group-hover:text-gold transition-colors leading-tight">
+          <p className="font-semibold text-navy text-base sm:text-base md:text-lg group-hover:text-gold transition-colors leading-tight">
             {title}
           </p>
-          <span className="inline-flex items-center gap-1 mt-1.5 md:mt-2 text-xs md:text-sm text-gold font-medium" aria-hidden>
+          <span className="inline-flex items-center gap-1 mt-1.5 md:mt-2 text-sm md:text-base text-gold font-medium" aria-hidden>
             <span>تفاصيل الوحدة</span>
             <ArrowLeft size={14} className="md:w-4 md:h-4" />
           </span>
@@ -183,7 +183,7 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
         <button
           type="button"
           onClick={() => scroll("prev")}
-          className="absolute top-1/2 -translate-y-1/2 right-0 w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/95 shadow-md border border-navy/10 flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors z-10"
+          className="absolute top-1/2 -translate-y-1/2 right-0 w-11 h-11 md:w-11 md:h-11 rounded-full bg-white/95 shadow-md border border-navy/10 flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors z-10"
           aria-label="البطاقة السابقة"
         >
           <ChevronRight size={20} />
@@ -191,7 +191,7 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
         <button
           type="button"
           onClick={() => scroll("next")}
-          className="absolute top-1/2 -translate-y-1/2 left-0 w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/95 shadow-md border border-navy/10 flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors z-10"
+          className="absolute top-1/2 -translate-y-1/2 left-0 w-11 h-11 md:w-11 md:h-11 rounded-full bg-white/95 shadow-md border border-navy/10 flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors z-10"
           aria-label="البطاقة التالية"
         >
           <ChevronLeft size={20} />
@@ -249,33 +249,33 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
               <h2 id="unit-modal-title" className="text-lg sm:text-xl font-bold text-navy mb-4 sm:mb-6">
                 {UNIT_TITLES[selectedUnit]}
               </h2>
-              <dl className="space-y-2.5 sm:space-y-3 text-navy text-sm sm:text-base">
+              <dl className="space-y-2.5 sm:space-y-3 text-navy text-base">
                 <div>
-                  <dt className="text-muted text-sm">المشروع</dt>
+                  <dt className="text-muted text-base">المشروع</dt>
                   <dd className="font-medium">{unit.project}</dd>
                 </div>
                 <div>
-                  <dt className="text-muted text-sm">المطور</dt>
+                  <dt className="text-muted text-base">المطور</dt>
                   <dd className="font-medium">{unit.developer}</dd>
                 </div>
                 <div>
-                  <dt className="text-muted text-sm">الموقع</dt>
+                  <dt className="text-muted text-base">الموقع</dt>
                   <dd className="font-medium">{unit.location}</dd>
                 </div>
                 <div>
-                  <dt className="text-muted text-sm">عدد الغرف</dt>
+                  <dt className="text-muted text-base">عدد الغرف</dt>
                   <dd className="font-medium">{unit.rooms}</dd>
                 </div>
                 <div>
-                  <dt className="text-muted text-sm">المساحة</dt>
+                  <dt className="text-muted text-base">المساحة</dt>
                   <dd className="font-medium">{unit.area}</dd>
                 </div>
                 <div>
-                  <dt className="text-muted text-sm">السعر</dt>
+                  <dt className="text-muted text-base">السعر</dt>
                   <dd className="font-medium">{unit.price}</dd>
                 </div>
                 <div>
-                  <dt className="text-muted text-sm">المقدم والتقسيط</dt>
+                  <dt className="text-muted text-base">المقدم والتقسيط</dt>
                   <dd className="font-medium">{unit.downPayment}</dd>
                 </div>
               </dl>

@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
-import { fadeInUp } from "@/lib/motion";
+import { fadeInUp, noMotion } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
 
 interface FAQSectionProps {
@@ -13,13 +13,15 @@ interface FAQSectionProps {
 
 export function FAQSection({ project }: FAQSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const reducedMotion = useReducedMotion();
+  const sectionVariants = reducedMotion ? noMotion : fadeInUp;
 
   return (
     <SectionWrapper id="faq">
       <motion.h2
-        initial={fadeInUp.initial}
-        whileInView={fadeInUp.animate}
-        viewport={fadeInUp.viewport}
+        initial={sectionVariants.initial}
+        whileInView={sectionVariants.animate}
+        viewport={sectionVariants.viewport}
         className="text-2xl font-bold text-navy mb-8 text-center"
       >
         أسئلة شائعة
@@ -28,9 +30,9 @@ export function FAQSection({ project }: FAQSectionProps) {
         {project.faqs.map((faq, i) => (
           <motion.div
             key={i}
-            initial={fadeInUp.initial}
-            whileInView={fadeInUp.animate}
-            viewport={fadeInUp.viewport}
+            initial={sectionVariants.initial}
+            whileInView={sectionVariants.animate}
+            viewport={sectionVariants.viewport}
             transition={{ delay: i * 0.03 }}
             className="rounded-xl border border-navy/10 bg-white overflow-hidden"
           >

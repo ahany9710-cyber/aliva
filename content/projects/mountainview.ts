@@ -13,6 +13,7 @@ export const content: ProjectContent = {
     "أليڤا يقدم شقق وڤيلات وتاون هاوس بمواصفات عالية في المستقبل سيتي. مقدم ١٠٠ الف جنيه والتقسيط يصل لـ ١٠ سنوات.",
   heroImage: "https://placehold.co/800x600/0F2140/FAFAF9?text=Aliva",
   heroVideo: "/hero-video.webm",
+  heroVideoMobile: "/hero-video-mobile.webm",
   startingPrice: "١٠،٥٠٠،٠٠٠ جنيه",
   downPayment: "١٠٠ الف جنيه",
   installmentYears: 10,
@@ -92,6 +93,8 @@ export const content: ProjectContent = {
     "عروض أليڤا من ماونتن ڤيو — مقدم ١٠٠ الف جنيه وتقسيط حتى ١٠ سنوات. المستقبل سيتي — القاهرة الجديدة. استفسر الآن.",
   ogImage: "https://placehold.co/1200x630/0F2140/FAFAF9?text=Aliva",
   whatsappNumber: "201213934972",
-  ctaText: "استفسر الآن",
+  whatsappInquiryMessage: "مساء الخير ، كنت بتواصل بخصوص ماونتن ڤيو اليڤا",
+  ctaText: "اتصل بـماونتن ڤيو",
+  leadFormCtaText: "سجل بماونتن ڤيو",
   offerBadge: "عرض محدود مقدم ١٠٠ الف جنيه فقط",
 };

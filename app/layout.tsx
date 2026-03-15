@@ -21,6 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl" className={cairo.variable}>
+      <head>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link rel="preload" as="image" href="/shutters.png" />
+      </head>
       <body className="antialiased min-h-screen bg-background text-foreground">
         {children}
       </body>

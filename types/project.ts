@@ -35,6 +35,8 @@ export interface ProjectContent {
   heroImage: string
   /** Optional hero video URL (e.g. /hero-video.mp4). When set, the hero shows video instead of the image. */
   heroVideo?: string
+  /** Optional smaller hero video for mobile (e.g. /hero-video-mobile.webm). When set, used on viewport <= 768px. */
+  heroVideoMobile?: string
   startingPrice: string
   downPayment: string
   installmentYears: number
@@ -48,6 +50,10 @@ export interface ProjectContent {
   seoDescription: string
   ogImage?: string
   whatsappNumber: string
+  /** Optional custom pre-filled message for header/inquiry WhatsApp link. When set, used instead of the default inquiry message. */
+  whatsappInquiryMessage?: string
   ctaText: string
+  /** Optional CTA text for the lead form submit button. When set, used instead of ctaText in the form. */
+  leadFormCtaText?: string
   offerBadge?: string
 }

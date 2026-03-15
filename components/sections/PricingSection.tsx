@@ -1,10 +1,10 @@
 "use client";
 
 import { Phone, Tag } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Button } from "@/components/ui/Button";
-import { fadeInUp } from "@/lib/motion";
+import { fadeInUp, noMotion } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
 
 interface PricingSectionProps {
@@ -16,13 +16,15 @@ interface PricingSectionProps {
 export function PricingSection({ project, contactPhone }: PricingSectionProps) {
   const phone = contactPhone ?? project.whatsappNumber;
   const callUrl = `tel:+${phone.replace(/\D/g, "")}`;
+  const reducedMotion = useReducedMotion();
+  const sectionVariants = reducedMotion ? noMotion : fadeInUp;
 
   return (
     <SectionWrapper id="pricing">
       <motion.div
-        initial={fadeInUp.initial}
-        whileInView={fadeInUp.animate}
-        viewport={fadeInUp.viewport}
+        initial={sectionVariants.initial}
+        whileInView={sectionVariants.animate}
+        viewport={sectionVariants.viewport}
         className="max-w-2xl mx-auto text-center p-8 rounded-2xl bg-white border border-navy/10 shadow-md"
       >
         <h2 className="text-2xl font-bold text-navy mb-4 flex items-center justify-center gap-2">
@@ -35,7 +37,7 @@ export function PricingSection({ project, contactPhone }: PricingSectionProps) {
         <p className="text-muted mt-2">
           مقدم {project.downPayment} — تقسيط حتى {project.installmentYears} سنة
         </p>
-        <p className="text-sm text-muted mt-1">
+        <p className="text-base text-muted mt-1">
           للاستفسار عن الوحدات والأسعار الحالية
         </p>
         <a
@@ -43,7 +45,11 @@ export function PricingSection({ project, contactPhone }: PricingSectionProps) {
           className="mt-6 inline-flex items-center gap-2"
         >
           <Button size="lg" className="gap-2">
-            <Phone size={18} aria-hidden />
+            {project.slug === "mountainview" ? (
+              <img src="/mountainview-emblem-white.png" alt="" aria-hidden className="w-7 h-7 object-contain" />
+            ) : (
+              <Phone size={18} aria-hidden />
+            )}
             {project.ctaText}
           </Button>
         </a>

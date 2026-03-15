@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Send } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -13,7 +13,7 @@ import type { LeadFormPayload } from "@/types/lead";
 import { isValidEgyptPhone, normalizeEgyptPhone } from "@/lib/validation";
 import { getSearchParam } from "@/lib/utils";
 import { trackClick } from "@/lib/analytics";
-import { fadeInUp } from "@/lib/motion";
+import { fadeInUp, noMotion } from "@/lib/motion";
 
 interface LeadFormSectionProps {
   project: ProjectContent;
@@ -22,6 +22,8 @@ interface LeadFormSectionProps {
 
 export function LeadFormSection({ project, searchParams }: LeadFormSectionProps) {
   const router = useRouter();
+  const reducedMotion = useReducedMotion();
+  const sectionVariants = reducedMotion ? noMotion : fadeInUp;
   const utmSource = getSearchParam(searchParams?.utm_source);
   const utmCampaign = getSearchParam(searchParams?.utm_campaign);
   const [name, setName] = useState("");
@@ -75,9 +77,9 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
   return (
     <SectionWrapper id="lead-form" className="bg-navy/5 rounded-2xl">
       <motion.div
-        initial={fadeInUp.initial}
-        whileInView={fadeInUp.animate}
-        viewport={fadeInUp.viewport}
+        initial={sectionVariants.initial}
+        whileInView={sectionVariants.animate}
+        viewport={sectionVariants.viewport}
         className="max-w-xl mx-auto"
       >
         <h2 className="text-2xl font-bold text-navy mb-2">
@@ -88,7 +90,7 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
         </p>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label htmlFor="lead-name" className="block text-sm font-medium text-navy mb-1">
+            <label htmlFor="lead-name" className="block text-base font-medium text-navy mb-1">
               الاسم *
             </label>
             <Input
@@ -103,7 +105,7 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
             />
           </div>
           <div>
-            <label htmlFor="lead-phone" className="block text-sm font-medium text-navy mb-1">
+            <label htmlFor="lead-phone" className="block text-base font-medium text-navy mb-1">
               رقم الهاتف *
             </label>
             <Input
@@ -116,6 +118,7 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
               autoComplete="tel"
               error={errors.phone}
             />
+            <p className="mt-1 text-sm text-muted">مثال: 01012345678</p>
           </div>
           {errors.form && (
             <p className="text-sm text-red-600">{errors.form}</p>
@@ -126,8 +129,12 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
             className="w-full gap-2"
             disabled={status === "loading"}
           >
-            <Send size={18} aria-hidden />
-            {status === "loading" ? "جاري الإرسال..." : project.ctaText}
+            {project.slug === "mountainview" ? (
+              <img src="/mountainview-emblem-white.png" alt="" aria-hidden className="w-7 h-7 object-contain" />
+            ) : (
+              <Send size={18} aria-hidden />
+            )}
+            {status === "loading" ? "جاري الإرسال..." : (project.leadFormCtaText ?? project.ctaText)}
           </Button>
         </form>
       </motion.div>

@@ -29,7 +29,7 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
         {/* Full-bleed video behind header and hero */}
         <div className="absolute inset-0 z-0">
           <video
-            src={project.heroVideo}
+            poster="/hero-poster.avif"
             autoPlay
             muted
             loop
@@ -37,13 +37,18 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
             preload="metadata"
             className="absolute inset-0 h-full w-full object-cover"
             aria-label={project.projectName}
-          />
-          {/* Gradient left → right so text is readable and video shows through on the right and in header */}
+          >
+            {project.heroVideoMobile && (
+              <source src={project.heroVideoMobile} type="video/webm" media="(max-width: 768px)" />
+            )}
+            <source src={project.heroVideo} type="video/webm" />
+          </video>
+          {/* Gradient so text on the right (RTL) is readable; light overlay on the right */}
           <div
             className="absolute inset-0 z-1"
             style={{
               background:
-                "linear-gradient(to right, rgba(250,250,249,0.4) 0%, rgba(250,250,249,0.2) 25%, transparent 45%)",
+                "linear-gradient(to left, rgba(250,250,249,0.4) 0%, rgba(250,250,249,0.2) 25%, transparent 45%)",
             }}
           />
         </div>
@@ -62,17 +67,44 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
               {project.headline}
             </h1>
+            {project.subheadline && (
+              <p className="mt-3 text-lg text-white/90 leading-relaxed">
+                {project.subheadline}
+              </p>
+            )}
             <div className="mt-8 flex flex-wrap gap-3">
               <a href={callUrl} className="inline-flex items-center gap-2">
                 <Button size="lg" className="gap-2">
-                  <Phone size={18} aria-hidden />
+                  {project.slug === "mountainview" ? (
+                    <Image
+                      src="/mountainview-emblem-white.png"
+                      alt=""
+                      width={18}
+                      height={18}
+                      className="shrink-0 object-contain"
+                      aria-hidden
+                    />
+                  ) : (
+                    <Phone size={18} aria-hidden />
+                  )}
                   {project.ctaText}
                 </Button>
               </a>
               <a href="#lead-form" className="inline-flex items-center gap-2">
                 <Button variant="secondary" size="lg" className="gap-2">
-                  <MessageSquare size={18} aria-hidden />
-                  اطلب استشارة
+                  {project.slug === "mountainview" ? (
+                    <Image
+                      src="/mountainview-emblem-gold.png"
+                      alt=""
+                      width={18}
+                      height={18}
+                      className="shrink-0 object-contain"
+                      aria-hidden
+                    />
+                  ) : (
+                    <MessageSquare size={18} aria-hidden />
+                  )}
+                  سجل الآن
                 </Button>
               </a>
             </div>
@@ -100,17 +132,44 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-navy leading-tight">
             {project.headline}
           </h1>
+          {project.subheadline && (
+            <p className="mt-3 text-lg text-muted leading-relaxed">
+              {project.subheadline}
+            </p>
+          )}
           <div className="mt-8 flex flex-wrap gap-3">
             <a href={callUrl} className="inline-flex items-center gap-2">
               <Button size="lg" className="gap-2">
-                <Phone size={18} aria-hidden />
+                {project.slug === "mountainview" ? (
+                  <Image
+                    src="/mountainview-emblem-white.png"
+                    alt=""
+                    width={18}
+                    height={18}
+                    className="shrink-0 object-contain"
+                    aria-hidden
+                  />
+                ) : (
+                  <Phone size={18} aria-hidden />
+                )}
                 {project.ctaText}
               </Button>
             </a>
             <a href="#lead-form" className="inline-flex items-center gap-2">
               <Button variant="secondary" size="lg" className="gap-2">
-                <MessageSquare size={18} aria-hidden />
-                اطلب استشارة
+                {project.slug === "mountainview" ? (
+                  <Image
+                    src="/mountainview-emblem-gold.png"
+                    alt=""
+                    width={18}
+                    height={18}
+                    className="shrink-0 object-contain"
+                    aria-hidden
+                  />
+                ) : (
+                  <MessageSquare size={18} aria-hidden />
+                )}
+                سجل الآن
               </Button>
             </a>
           </div>
