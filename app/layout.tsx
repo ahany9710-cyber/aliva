@@ -25,7 +25,6 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" className={cairo.variable}>
       <head>
-        <link rel="preload" as="image" href="/hero-poster.avif" />
         <link rel="preload" as="image" href="/shutters.webp" />
       </head>
       <body className="antialiased min-h-screen bg-background text-foreground">

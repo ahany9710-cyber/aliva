@@ -45,7 +45,6 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
           {/* fetchPriority is valid for LCP but not in React's VideoHTMLAttributes; suppresses TS error */}
           <video
             ref={videoRef}
-            poster="/hero-poster.avif"
             autoPlay
             muted
             loop
