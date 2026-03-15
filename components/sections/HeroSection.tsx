@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
-import { MessageCircle, MessageSquare, Phone } from "lucide-react";
+import { MessageCircle, MessageSquare, Phone, Play } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -16,12 +16,35 @@ interface HeroSectionProps {
 
 const HEADER_HEIGHT = 56; // h-14 = 3.5rem
 
+function isMobileOrSafari(): boolean {
+  if (typeof window === "undefined") return false;
+  const narrow = window.matchMedia("(max-width: 768px)").matches;
+  const ua = navigator.userAgent;
+  const safari = /^((?!chrome|android).)*safari/i.test(ua) || /iPhone|iPad|iPod/i.test(ua);
+  return narrow || !!safari;
+}
+
 export function HeroSection({ project, contactPhone }: HeroSectionProps) {
   const phone = contactPhone ?? project.whatsappNumber;
   const callUrl = `tel:+${phone.replace(/\D/g, "")}`;
   const hasVideo = !!project.heroVideo;
   const videoRef = useRef<HTMLVideoElement>(null);
-  const playAttemptedByUserRef = useRef(false);
+  const [needsTapToPlay, setNeedsTapToPlay] = useState(false);
+
+  // Prefer MP4 on mobile/Safari (iOS doesn't support WebM) so the right source loads immediately.
+  useEffect(() => {
+    if (!hasVideo || !isMobileOrSafari()) return;
+    const video = videoRef.current;
+    if (!video) return;
+    const mp4 =
+      typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches
+        ? project.heroVideoMobileMp4 ?? project.heroVideoMp4
+        : project.heroVideoMp4;
+    if (mp4) {
+      video.src = mp4;
+      video.load();
+    }
+  }, [hasVideo, project.heroVideoMobileMp4, project.heroVideoMp4]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -35,6 +58,9 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
     };
 
     tryPlay();
+
+    const onPlaying = () => setNeedsTapToPlay(false);
+    video.addEventListener("playing", onPlaying);
 
     const events: (keyof HTMLMediaElementEventMap)[] = [
       "loadedmetadata",
@@ -52,32 +78,37 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
     document.addEventListener("visibilitychange", onVisible);
     window.addEventListener("pageshow", onVisible);
 
+    // Show tap overlay on mobile/Safari so user can start playback with a direct gesture.
+    if (isMobileOrSafari()) {
+      const check = () => {
+        if (video.paused) setNeedsTapToPlay(true);
+      };
+      video.addEventListener("canplay", check);
+      check();
+      return () => {
+        video.removeEventListener("playing", onPlaying);
+        handlers.forEach((c) => c());
+        document.removeEventListener("visibilitychange", onVisible);
+        window.removeEventListener("pageshow", onVisible);
+        video.removeEventListener("canplay", check);
+      };
+    }
+
     return () => {
-      handlers.forEach((cleanup) => cleanup());
+      video.removeEventListener("playing", onPlaying);
+      handlers.forEach((c) => c());
       document.removeEventListener("visibilitychange", onVisible);
       window.removeEventListener("pageshow", onVisible);
     };
   }, [hasVideo]);
 
-  // On mobile, autoplay is often blocked until there's a user gesture. Start play on first touch/click.
-  useEffect(() => {
-    if (!hasVideo) return;
+  const handleTapToPlay = () => {
     const video = videoRef.current;
-    const onUserGesture = () => {
-      if (playAttemptedByUserRef.current || !video) return;
-      playAttemptedByUserRef.current = true;
-      video.muted = true;
-      video.play().catch(() => {});
-      document.removeEventListener("touchstart", onUserGesture, { capture: true });
-      document.removeEventListener("click", onUserGesture, { capture: true });
-    };
-    document.addEventListener("touchstart", onUserGesture, { capture: true, once: false });
-    document.addEventListener("click", onUserGesture, { capture: true, once: false });
-    return () => {
-      document.removeEventListener("touchstart", onUserGesture, { capture: true });
-      document.removeEventListener("click", onUserGesture, { capture: true });
-    };
-  }, [hasVideo]);
+    if (!video) return;
+    video.muted = true;
+    video.play().catch(() => {});
+    setNeedsTapToPlay(false);
+  };
 
   if (hasVideo) {
     return (
@@ -109,9 +140,26 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
             )}
             {project.heroVideoMp4 && <source src={project.heroVideoMp4} type="video/mp4" />}
           </video>
+          {/* Tap-to-play overlay for mobile (autoplay often blocked); play() runs on direct user gesture */}
+          {needsTapToPlay && (
+            <button
+              type="button"
+              onClick={handleTapToPlay}
+              onTouchEnd={(e) => {
+                e.preventDefault();
+                handleTapToPlay();
+              }}
+              className="absolute inset-0 z-1 flex items-center justify-center bg-black/30 transition-opacity hover:bg-black/40 active:bg-black/50"
+              aria-label="تشغيل الفيديو"
+            >
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-navy shadow-lg">
+                <Play size={28} className="mr-0.5 shrink-0 fill-current" aria-hidden />
+              </span>
+            </button>
+          )}
           {/* Gradient so text on the right (RTL) is readable; light overlay on the right */}
           <div
-            className="absolute inset-0 z-1"
+            className="absolute inset-0 z-2 pointer-events-none"
             style={{
               background:
                 "linear-gradient(to left, rgba(250,250,249,0.4) 0%, rgba(250,250,249,0.2) 25%, transparent 45%)",
