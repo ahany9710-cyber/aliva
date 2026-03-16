@@ -35,7 +35,7 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
     const next: Record<string, string> = {};
     if (!name.trim()) next.name = "الاسم مطلوب";
     if (!phone.trim()) next.phone = "رقم الهاتف مطلوب";
-    else if (!isValidEgyptPhone(phone)) next.phone = "رقم هاتف مصري صحيح مطلوب";
+    else if (!isValidEgyptPhone(phone)) next.phone = "رقم هاتف صحيح مطلوب (مصر، السعودية، البحرين، الإمارات، قطر)";
     setErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -113,12 +113,12 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="01xxxxxxxxx"
+              placeholder="+20 10xxxxxxxx أو +966 5xxxxxxxx"
               disabled={status === "loading"}
               autoComplete="tel"
               error={errors.phone}
             />
-            <p className="mt-1 text-sm text-muted">مثال: 01012345678</p>
+            <p className="mt-1 text-sm text-muted">مثال: 01012345678 أو 966501234567 (مصر، السعودية، البحرين، الإمارات، قطر)</p>
           </div>
           {errors.form && (
             <p className="text-sm text-red-600">{errors.form}</p>

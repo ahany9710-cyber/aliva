@@ -32,8 +32,9 @@ export function buildWhatsAppUrl(
   phone: string,
   message?: string
 ): string {
-  const normalized = phone.replace(/\D/g, "")
-  const number = normalized.startsWith("20") ? normalized : `20${normalized}`
+  const digits = phone.replace(/\D/g, "")
+  const hasCountryCode = /^(20|966|971|973|974)/.test(digits)
+  const number = hasCountryCode ? digits : `20${digits}`
   const base = `https://wa.me/${number}`
   if (message?.trim()) {
     return `${base}?text=${encodeURIComponent(message.trim())}`

@@ -4,6 +4,8 @@ import { LayoutDashboard, Users, FileStack, BarChart3, Mail } from "lucide-react
 import { createSsrClient } from "@/lib/supabase";
 import { AdminSignOut } from "./AdminSignOut";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminLayout({
   children,
 }: {
@@ -43,6 +45,7 @@ export default async function AdminLayout({
         <nav className="flex flex-col gap-1">
           <Link
             href="/admin"
+            prefetch={false}
             className="flex items-center gap-2 rounded-lg px-3 py-2 text-navy hover:bg-navy/5 font-medium"
           >
             <LayoutDashboard size={18} className="text-gold shrink-0" aria-hidden />
@@ -50,6 +53,7 @@ export default async function AdminLayout({
           </Link>
           <Link
             href="/admin/leads"
+            prefetch={false}
             className="flex items-center gap-2 rounded-lg px-3 py-2 text-navy hover:bg-navy/5"
           >
             <Users size={18} className="text-blue-600 shrink-0" aria-hidden />
@@ -57,6 +61,7 @@ export default async function AdminLayout({
           </Link>
           <Link
             href="/admin/pages"
+            prefetch={false}
             className="flex items-center gap-2 rounded-lg px-3 py-2 text-navy hover:bg-navy/5"
           >
             <FileStack size={18} className="text-slate-600 shrink-0" aria-hidden />
@@ -64,6 +69,7 @@ export default async function AdminLayout({
           </Link>
           <Link
             href="/admin/analytics"
+            prefetch={false}
             className="flex items-center gap-2 rounded-lg px-3 py-2 text-navy hover:bg-navy/5"
           >
             <BarChart3 size={18} className="text-emerald-600 shrink-0" aria-hidden />

@@ -23,6 +23,10 @@ export async function middleware(request: NextRequest) {
     },
   });
 
+  // Refresh session so expired tokens are updated and cookies are written to the response.
+  // In production, the browser can have a valid session while the server sees an expired token
+  // until we run getSession(), which triggers refresh and setAll() to write new cookies.
+  await supabase.auth.getSession();
   const {
     data: { user },
   } = await supabase.auth.getUser();

@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     }
     if (!isValidEgyptPhone(payload.phone)) {
       return NextResponse.json(
-        { message: "رقم هاتف مصري صحيح مطلوب" },
+        { message: "رقم هاتف صحيح مطلوب (مصر، السعودية، البحرين، الإمارات، قطر)" },
         { status: 400 }
       );
     }
