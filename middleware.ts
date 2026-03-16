@@ -11,21 +11,25 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const response = NextResponse.next();
+  // Follow Supabase SSR pattern: setAll must update request.cookies so getUser()
+  // reads refreshed tokens in the same middleware run, and recreate the response
+  // with the updated request so Server Components receive the new cookies too.
+  let response = NextResponse.next({ request });
+
   const supabase = createSsrClient({
     getAll() {
       return request.cookies.getAll().map((c) => ({ name: c.name, value: c.value }));
     },
     setAll(cookiesToSet) {
+      cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+      response = NextResponse.next({ request });
       cookiesToSet.forEach(({ name, value, options }) => {
         response.cookies.set(name, value, options as Record<string, unknown>);
       });
     },
   });
 
-  // Refresh session so expired tokens are updated and cookies are written to the response.
-  // In production, the browser can have a valid session while the server sees an expired token
-  // until we run getSession(), which triggers refresh and setAll() to write new cookies.
+  // getSession() triggers token refresh if expired; refreshed cookies go to setAll above.
   await supabase.auth.getSession();
   const {
     data: { user },
