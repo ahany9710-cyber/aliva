@@ -14,6 +14,7 @@ import { isValidEgyptPhone, normalizeEgyptPhone } from "@/lib/validation";
 import { getSearchParam } from "@/lib/utils";
 import { trackClick } from "@/lib/analytics";
 import { fadeInUp, noMotion } from "@/lib/motion";
+import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
 
 interface LeadFormSectionProps {
   project: ProjectContent;
@@ -129,7 +130,7 @@ export function LeadFormSection({ project, searchParams }: LeadFormSectionProps)
             className="w-full gap-2"
             disabled={status === "loading"}
           >
-            {project.slug === "mountainview" ? (
+            {isMountainViewLandingSlug(project.slug) ? (
               <img src="/mountainview-emblem-white.webp" alt="" aria-hidden className="w-7 h-7 object-contain" />
             ) : (
               <Send size={18} aria-hidden />

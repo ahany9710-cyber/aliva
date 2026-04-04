@@ -33,6 +33,8 @@ export interface ProjectContent {
   subheadline: string
   description: string
   heroImage: string
+  /** Optional image for About / secondary sections. Omit when the hero already uses heroImage/video so the same art is not shown twice. */
+  aboutImage?: string
   /** Optional hero video URL (e.g. /hero-video.mp4). When set, the hero shows video instead of the image. */
   heroVideo?: string
   /** Optional smaller hero video for mobile (e.g. /hero-video-mobile.webm). When set, used on viewport <= 768px. */
@@ -53,6 +55,8 @@ export interface ProjectContent {
   seoTitle: string
   seoDescription: string
   ogImage?: string
+  /** When set, `tel:` links use this number; otherwise they use whatsappNumber. */
+  phoneNumber?: string
   whatsappNumber: string
   /** Optional custom pre-filled message for header/inquiry WhatsApp link. When set, used instead of the default inquiry message. */
   whatsappInquiryMessage?: string

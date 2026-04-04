@@ -39,3 +39,33 @@ export const noMotionStagger = {
     show: { opacity: 1, y: 0 },
   },
 };
+
+/** Slower stagger for hero / Wadi Yemm text rows. */
+export const revealStagger = {
+  container: {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.11, delayChildren: 0.08 },
+    },
+  },
+  item: {
+    hidden: { opacity: 0, y: 20 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+    },
+  },
+};
+
+export const revealStaggerReduced = {
+  container: {
+    hidden: { opacity: 1 },
+    show: { opacity: 1 },
+  },
+  item: {
+    hidden: { opacity: 1, y: 0 },
+    show: { opacity: 1, y: 0 },
+  },
+};

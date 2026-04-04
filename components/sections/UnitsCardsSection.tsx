@@ -118,7 +118,7 @@ interface UnitsCardsSectionProps {
 const SCROLL_EPS = 2;
 
 export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: UnitsCardsSectionProps) {
-  const phone = contactPhone ?? project.whatsappNumber;
+  const phone = contactPhone ?? project.phoneNumber ?? project.whatsappNumber;
   const whatsapp = contactWhatsapp ?? project.whatsappNumber;
   const scrollRef = useRef<HTMLDivElement>(null);
   const [selectedUnit, setSelectedUnit] = useState<number | null>(null);

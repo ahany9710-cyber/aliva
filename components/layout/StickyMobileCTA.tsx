@@ -3,10 +3,13 @@
 import { MessageCircle, Phone } from "lucide-react";
 import { buildProjectWhatsAppUrl, buildWhatsAppUrl } from "@/lib/utils";
 import { trackClick } from "@/lib/analytics";
+import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
 
 interface StickyMobileCTAProps {
   projectSlug: string;
   whatsappNumber: string;
+  /** Number for tel: (defaults to whatsappNumber when omitted). */
+  callPhone?: string;
   ctaText: string;
   projectName?: string;
 }
@@ -14,13 +17,16 @@ interface StickyMobileCTAProps {
 export function StickyMobileCTA({
   projectSlug,
   whatsappNumber,
+  callPhone,
   ctaText,
   projectName,
 }: StickyMobileCTAProps) {
   const whatsappUrl = projectName
     ? buildProjectWhatsAppUrl({ whatsappNumber, projectName }, "inquiry")
     : buildWhatsAppUrl(whatsappNumber);
-  const callUrl = `tel:+${whatsappNumber.replace(/\D/g, "")}`;
+  const callDigits = (callPhone ?? whatsappNumber).replace(/\D/g, "");
+  const callUrl = `tel:+${callDigits}`;
+  const mvLanding = isMountainViewLandingSlug(projectSlug);
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-[10000] p-4 bg-background/95 backdrop-blur border-t border-navy/10 md:hidden">
@@ -32,7 +38,7 @@ export function StickyMobileCTA({
           onClick={() => trackClick(projectSlug, "cta_whatsapp")}
           className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] text-white py-3 px-4 font-medium text-sm hover:bg-[#20bd5a] transition-colors"
         >
-          {projectSlug === "mountainview" ? (
+          {mvLanding ? (
             <img src="/mountainview-emblem-white.webp" alt="" aria-hidden className="w-7 h-7 object-contain" />
           ) : (
             <MessageCircle size={18} aria-hidden />
@@ -44,7 +50,7 @@ export function StickyMobileCTA({
           onClick={() => trackClick(projectSlug, "cta_call")}
           className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-gold text-white py-3 px-4 font-medium text-sm shadow-md hover:opacity-90 transition-opacity"
         >
-          {projectSlug === "mountainview" ? (
+          {mvLanding ? (
             <img src="/mountainview-emblem-white.webp" alt="" aria-hidden className="w-7 h-7 object-contain" />
           ) : (
             <Phone size={18} aria-hidden />

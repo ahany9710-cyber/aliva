@@ -40,7 +40,10 @@ export async function generateMetadata({
 }
 
 export function generateStaticParams() {
-  return getAllProjectSlugs().map((slug) => ({ slug }));
+  /** Static `app/ras-el-hekma/page.tsx` owns this URL; exclude from dynamic SSG. */
+  return getAllProjectSlugs()
+    .filter((slug) => slug !== "ras-el-hekma")
+    .map((slug) => ({ slug }));
 }
 
 export default async function ProjectPage({ params, searchParams }: PageProps) {

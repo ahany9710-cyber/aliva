@@ -5,6 +5,7 @@ import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { buildProjectWhatsAppUrl, buildWhatsAppUrl } from "@/lib/utils";
 import { trackClick } from "@/lib/analytics";
+import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
 
 interface MinimalHeaderProps {
   projectSlug: string;
@@ -20,6 +21,7 @@ interface MinimalHeaderProps {
 }
 
 export function MinimalHeader({ projectSlug, projectName, whatsappNumber, whatsappInquiryMessage, logoSrc, logoAlt, overHero }: MinimalHeaderProps) {
+  const mvLanding = isMountainViewLandingSlug(projectSlug);
   const whatsappUrl = whatsappInquiryMessage
     ? buildWhatsAppUrl(whatsappNumber, whatsappInquiryMessage)
     : projectName
@@ -57,7 +59,7 @@ export function MinimalHeader({ projectSlug, projectName, whatsappNumber, whatsa
           onClick={() => trackClick(projectSlug, "header_whatsapp")}
           className="inline-flex items-center gap-2 rounded-xl bg-[#25D366] text-white px-4 py-2 text-base font-medium hover:bg-[#20bd5a] transition-colors"
         >
-          {projectSlug === "mountainview" ? (
+          {mvLanding ? (
             <Image
               src="/mountainview-emblem-white.webp"
               alt=""

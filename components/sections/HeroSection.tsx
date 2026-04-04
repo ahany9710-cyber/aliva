@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import type { ProjectContent } from "@/types/project";
+import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
 
 interface HeroSectionProps {
   project: ProjectContent;
@@ -24,7 +25,7 @@ function HeroCTAs({
   ctaText: string;
   slug: string;
 }) {
-  const mountainviewLogo = slug === "mountainview";
+  const mountainviewLogo = isMountainViewLandingSlug(slug);
   return (
     <div className="mt-8 flex flex-wrap gap-3">
       <a href={callUrl} className="inline-flex items-center gap-2">
@@ -66,7 +67,7 @@ function HeroCTAs({
 }
 
 export function HeroSection({ project, contactPhone }: HeroSectionProps) {
-  const phone = contactPhone ?? project.whatsappNumber;
+  const phone = contactPhone ?? project.phoneNumber ?? project.whatsappNumber;
   const callUrl = `tel:+${phone.replace(/\D/g, "")}`;
   const hasVideo = !!project.heroVideo;
   const videoRef = useRef<HTMLVideoElement>(null);

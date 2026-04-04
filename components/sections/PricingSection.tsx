@@ -6,6 +6,7 @@ import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Button } from "@/components/ui/Button";
 import { fadeInUp, noMotion } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
+import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
 
 interface PricingSectionProps {
   project: ProjectContent;
@@ -14,7 +15,7 @@ interface PricingSectionProps {
 }
 
 export function PricingSection({ project, contactPhone }: PricingSectionProps) {
-  const phone = contactPhone ?? project.whatsappNumber;
+  const phone = contactPhone ?? project.phoneNumber ?? project.whatsappNumber;
   const callUrl = `tel:+${phone.replace(/\D/g, "")}`;
   const reducedMotion = useReducedMotion();
   const sectionVariants = reducedMotion ? noMotion : fadeInUp;
@@ -45,7 +46,7 @@ export function PricingSection({ project, contactPhone }: PricingSectionProps) {
           className="mt-6 inline-flex items-center gap-2"
         >
           <Button size="lg" className="gap-2">
-            {project.slug === "mountainview" ? (
+            {isMountainViewLandingSlug(project.slug) ? (
               <img src="/mountainview-emblem-white.webp" alt="" aria-hidden className="w-7 h-7 object-contain" />
             ) : (
               <Phone size={18} aria-hidden />

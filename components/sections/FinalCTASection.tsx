@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { buildProjectWhatsAppUrl } from "@/lib/utils";
 import { fadeInUp, noMotion } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
+import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
 
 interface FinalCTASectionProps {
   project: ProjectContent;
@@ -44,7 +45,7 @@ export function FinalCTASection({ project, contactWhatsapp }: FinalCTASectionPro
               size="lg"
               className="gap-2 bg-gold hover:bg-amber-500 text-white border-0"
             >
-              {project.slug === "mountainview" ? (
+              {isMountainViewLandingSlug(project.slug) ? (
                 <img src="/mountainview-emblem-white.webp" alt="" aria-hidden className="w-7 h-7 object-contain" />
               ) : (
                 <MessageCircle size={18} aria-hidden />
@@ -58,7 +59,7 @@ export function FinalCTASection({ project, contactWhatsapp }: FinalCTASectionPro
               size="lg"
               className="gap-2 border-2 border-white text-white hover:bg-white hover:text-navy"
             >
-              {project.slug === "mountainview" ? (
+              {isMountainViewLandingSlug(project.slug) ? (
                 <img src="/mountainview-emblem-white.webp" alt="" aria-hidden className="w-7 h-7 object-contain" />
               ) : (
                 <MessageSquare size={18} aria-hidden />

@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import type { ProjectContent } from "@/types/project";
 import type { NextSearchParams } from "@/types/next";
+import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
 import { MinimalHeader } from "@/components/layout/MinimalHeader";
 import { MinimalFooter } from "@/components/layout/MinimalFooter";
 import { StickyMobileCTA } from "@/components/layout/StickyMobileCTA";
@@ -61,12 +62,14 @@ export function LandingPageTemplate({
   phoneOverride,
   whatsappOverride,
 }: LandingPageTemplateProps) {
-  const contactPhone = phoneOverride ?? project.whatsappNumber;
+  const contactPhone =
+    phoneOverride ?? project.phoneNumber ?? project.whatsappNumber;
   const contactWhatsapp = whatsappOverride ?? project.whatsappNumber;
+  const mvLanding = isMountainViewLandingSlug(project.slug);
 
   return (
     <>
-      {project.slug === "mountainview" && (
+      {mvLanding && (
         <WindowSplashScreen shutterImageSrc="/shutters.webp" />
       )}
       <MinimalHeader
@@ -74,13 +77,13 @@ export function LandingPageTemplate({
         projectName={project.projectName}
         whatsappNumber={contactWhatsapp}
         whatsappInquiryMessage={project.whatsappInquiryMessage}
-        logoSrc={project.slug === "mountainview" ? "/Mountain View Logo.webp" : undefined}
-        logoAlt={project.slug === "mountainview" ? project.projectName : undefined}
+        logoSrc={mvLanding ? "/Mountain View Logo.webp" : undefined}
+        logoAlt={mvLanding ? project.projectName : undefined}
         overHero={!!project.heroVideo}
       />
       <main className="pb-24 md:pb-0">
         <HeroSection project={project} contactPhone={contactPhone} />
-        {project.slug === "mountainview" && (
+        {mvLanding && (
           <UnitsCardsSection project={project} contactPhone={contactPhone} contactWhatsapp={contactWhatsapp} />
         )}
         <HighlightsSection project={project} />
@@ -95,6 +98,7 @@ export function LandingPageTemplate({
       <StickyMobileCTA
         projectSlug={project.slug}
         whatsappNumber={contactWhatsapp}
+        callPhone={contactPhone}
         ctaText={project.ctaText}
         projectName={project.projectName}
       />
