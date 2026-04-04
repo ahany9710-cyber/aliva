@@ -1,10 +1,10 @@
 import type { ProjectContent } from "@/types/project";
 
-/** Ras El Hekma (Modon) — scaffold aligned with modon.com/real-estate/ras-el-hekma; refine copy and assets later. */
+/** Ras El Hekma (مُدن) — scaffold aligned with modon.com/real-estate/ras-el-hekma; refine copy and assets later. */
 export const content: ProjectContent = {
   slug: "ras-el-hekma",
   projectName: "راس الحكمة",
-  developer: "مودون",
+  developer: "مُدن",
   location:
     "مدينة ساحلية جديدة على البحر المتوسط في مصر، مصممة حول ١٧ حيّاً مميزاً، مع وصول سهل براً وبحراً وجواً.",
   headline: "راس الحكمة — جودة حياه إماراتية على أرض مصرية",
@@ -22,7 +22,7 @@ export const content: ProjectContent = {
   highlights: [
     { icon: "location", label: "الوجهة", value: "راس الحكمة — الساحل الشمالي، مصر" },
     { icon: "home", label: "الوحدات", value: "فيلات — تاون هاوس — شقق" },
-    { icon: "building", label: "المطور", value: "مودون" },
+    { icon: "building", label: "المطور", value: "مُدن" },
     { icon: "calendar", label: "المشروع", value: "١٧ حيّاً — وادي يم المرحلة الأولى" },
     { icon: "wallet", label: "الساحل", value: "نحو ٤٤ كم من الشريط الساحلي" },
     { icon: "chart", label: "نمط الحياة", value: "متوسطي — شوارع مشاة — مساحات خضراء وممرات مائية" },
@@ -88,12 +88,12 @@ export const content: ProjectContent = {
         "يمكنك ملء النموذج أدناه أو التواصل عبر واتساب لتلقي التحديثات والمعلومات عن المراحل والتسعير.",
     },
   ],
-  seoTitle: "راس الحكمة | مودون — فيلات وتاون هاوس وشقق على البحر المتوسط",
+  seoTitle: "راس الحكمة | مُدن — فيلات وتاون هاوس وشقق على البحر المتوسط",
   seoDescription:
-    "راس الحكمة من مودون: مدينة ساحلية جديدة، وادي يم أول الأحياء. شريط ساحلي، حياة متوسطية، تسجيل الاهتمام.",
+    "راس الحكمة من مُدن: مدينة ساحلية جديدة، وادي يم أول الأحياء. شريط ساحلي، حياة متوسطية، تسجيل الاهتمام.",
   ogImage: "/modonhero.jpeg",
   whatsappNumber: "201234567890",
-  whatsappInquiryMessage: "مساء الخير، أود الاستفسار عن راس الحكمة — وادي يم (مودون)",
+  whatsappInquiryMessage: "مساء الخير، أود الاستفسار عن راس الحكمة — وادي يم (مُدن)",
   ctaText: "تواصل بخصوص راس الحكمة",
   leadFormCtaText: "سجّل اهتمامك — راس الحكمة",
   offerBadge: "وادي يم — المرحلة الأولى من راس الحكمة",
