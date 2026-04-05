@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { fadeInUp, noMotion } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
 import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
+import { trackMetaContact } from "@/lib/meta-fbq";
 
 interface PricingSectionProps {
   project: ProjectContent;
@@ -44,6 +45,7 @@ export function PricingSection({ project, contactPhone }: PricingSectionProps) {
         <a
           href={callUrl}
           className="mt-6 inline-flex items-center gap-2"
+          onClick={() => trackMetaContact(project.slug, "phone_pricing")}
         >
           <Button size="lg" className="gap-2">
             {isMountainViewLandingSlug(project.slug) ? (

@@ -7,6 +7,7 @@ import { ArrowLeft, ChevronRight, ChevronLeft, X, Phone, MessageCircle } from "l
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { buildWhatsAppUrl } from "@/lib/utils";
 import type { ProjectContent } from "@/types/project";
+import { trackMetaContact } from "@/lib/meta-fbq";
 
 const CTA_TEXT = "احصل على عرض سعر";
 
@@ -340,6 +341,7 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
                 <a
                   href={telUrl}
                   className="min-h-[48px] inline-flex items-center justify-center gap-2 rounded-xl bg-navy text-white py-3.5 px-5 font-medium hover:bg-navy/90 active:opacity-90 transition-colors touch-manipulation"
+                  onClick={() => trackMetaContact(project.slug, "phone_unit_modal")}
                 >
                   <Phone size={20} aria-hidden />
                   اتصال
@@ -349,6 +351,7 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
                   target="_blank"
                   rel="noopener noreferrer"
                   className="min-h-[48px] inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] text-white py-3.5 px-5 font-medium hover:bg-[#20bd5a] active:opacity-90 transition-colors touch-manipulation"
+                  onClick={() => trackMetaContact(project.slug, "whatsapp_unit_modal")}
                 >
                   <MessageCircle size={20} aria-hidden />
                   واتساب

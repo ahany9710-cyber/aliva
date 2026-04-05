@@ -8,6 +8,7 @@ import { buildProjectWhatsAppUrl } from "@/lib/utils";
 import { fadeInUp, noMotion } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
 import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
+import { trackMetaContact } from "@/lib/meta-fbq";
 
 interface FinalCTASectionProps {
   project: ProjectContent;
@@ -39,7 +40,12 @@ export function FinalCTASection({ project, contactWhatsapp }: FinalCTASectionPro
           تواصل الآن واحصل على أفضل العروض وخطط التقسيط المناسبة لك.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackMetaContact(project.slug, "whatsapp_final_section")}
+          >
             <Button
               variant="primary"
               size="lg"

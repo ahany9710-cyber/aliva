@@ -5,6 +5,7 @@ import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { buildProjectWhatsAppUrl, buildWhatsAppUrl } from "@/lib/utils";
 import { trackClick } from "@/lib/analytics";
+import { trackMetaContact } from "@/lib/meta-fbq";
 import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
 
 interface MinimalHeaderProps {
@@ -56,7 +57,10 @@ export function MinimalHeader({ projectSlug, projectName, whatsappNumber, whatsa
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          onClick={() => trackClick(projectSlug, "header_whatsapp")}
+          onClick={() => {
+            trackClick(projectSlug, "header_whatsapp");
+            trackMetaContact(projectSlug, "whatsapp_header");
+          }}
           className="inline-flex items-center gap-2 rounded-xl bg-[#25D366] text-white px-4 py-2 text-base font-medium hover:bg-[#20bd5a] transition-colors"
         >
           {mvLanding ? (

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import type { ProjectContent } from "@/types/project";
 import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
+import { trackMetaContact } from "@/lib/meta-fbq";
 
 interface HeroSectionProps {
   project: ProjectContent;
@@ -28,7 +29,11 @@ function HeroCTAs({
   const mountainviewLogo = isMountainViewLandingSlug(slug);
   return (
     <div className="mt-8 flex flex-wrap gap-3">
-      <a href={callUrl} className="inline-flex items-center gap-2">
+      <a
+        href={callUrl}
+        className="inline-flex items-center gap-2"
+        onClick={() => trackMetaContact(slug, "phone_hero")}
+      >
         <Button size="lg" className="gap-2">
           {mountainviewLogo ? (
             <Image

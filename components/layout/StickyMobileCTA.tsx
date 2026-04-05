@@ -3,6 +3,7 @@
 import { MessageCircle, Phone } from "lucide-react";
 import { buildProjectWhatsAppUrl, buildWhatsAppUrl } from "@/lib/utils";
 import { trackClick } from "@/lib/analytics";
+import { trackMetaContact } from "@/lib/meta-fbq";
 import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
 
 interface StickyMobileCTAProps {
@@ -35,7 +36,10 @@ export function StickyMobileCTA({
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          onClick={() => trackClick(projectSlug, "cta_whatsapp")}
+          onClick={() => {
+            trackClick(projectSlug, "cta_whatsapp");
+            trackMetaContact(projectSlug, "whatsapp_sticky");
+          }}
           className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] text-white py-3 px-4 font-medium text-sm hover:bg-[#20bd5a] transition-colors"
         >
           {mvLanding ? (
@@ -47,7 +51,10 @@ export function StickyMobileCTA({
         </a>
         <a
           href={callUrl}
-          onClick={() => trackClick(projectSlug, "cta_call")}
+          onClick={() => {
+            trackClick(projectSlug, "cta_call");
+            trackMetaContact(projectSlug, "phone_sticky");
+          }}
           className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-gold text-white py-3 px-4 font-medium text-sm shadow-md hover:opacity-90 transition-opacity"
         >
           {mvLanding ? (

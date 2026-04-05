@@ -5,6 +5,9 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { buildWhatsAppUrl } from "@/lib/utils";
 import { getProjectBySlug } from "@/content/projects";
+import { MetaPixelThankYouEvents } from "@/components/analytics/MetaPixelThankYouEvents";
+import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
+import { trackMetaContact } from "@/lib/meta-fbq";
 import { Button } from "@/components/ui/Button";
 import { MinimalFooter } from "@/components/layout/MinimalFooter";
 
@@ -20,9 +23,11 @@ function ThankYouContent() {
       ? `مرحباً، تم إرسال استفساري عن مشروع ${project.projectName} وأريد متابعة الحجز`
       : undefined
   );
+  const mvThankYou = project && isMountainViewLandingSlug(project.slug);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      {project && <MetaPixelThankYouEvents projectSlug={project.slug} />}
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-16">
         <div className="max-w-md w-full text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gold/20 text-gold mb-6">
@@ -36,7 +41,16 @@ function ThankYouContent() {
             الواتساب.
           </p>
           <div className="flex flex-col gap-3">
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => {
+                if (project && mvThankYou) {
+                  trackMetaContact(project.slug, "thank_you_whatsapp");
+                }
+              }}
+            >
               <Button size="lg" className="w-full">
                 تواصل عبر واتساب
               </Button>
