@@ -3,7 +3,9 @@
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
+import Script from "next/script";
 import { buildWhatsAppUrl } from "@/lib/utils";
+import { getMetaPixelInlineBootstrap } from "@/lib/meta-fbq";
 import { getProjectBySlug } from "@/content/projects";
 import { MetaPixelThankYouEvents } from "@/components/analytics/MetaPixelThankYouEvents";
 import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
@@ -27,6 +29,15 @@ function ThankYouContent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      {mvThankYou && (
+        <Script
+          id="meta-pixel-thank-you"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: getMetaPixelInlineBootstrap({ viewContent: false }),
+          }}
+        />
+      )}
       {project && <MetaPixelThankYouEvents projectSlug={project.slug} />}
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-16">
         <div className="max-w-md w-full text-center">
