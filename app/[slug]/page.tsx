@@ -4,6 +4,7 @@ import { getProjectBySlug, getAllProjectSlugs } from "@/content/projects";
 import { createServerClient } from "@/lib/supabase";
 import { getSearchParam } from "@/lib/utils";
 import { LandingPageTemplate } from "@/components/LandingPageTemplate";
+import { MetaPixel } from "@/components/analytics/MetaPixel";
 import { VisitTracker } from "@/components/analytics/VisitTracker";
 import type { NextSearchParams } from "@/types/next";
 
@@ -65,6 +66,7 @@ export default async function ProjectPage({ params, searchParams }: PageProps) {
 
   return (
     <>
+      <MetaPixel slug={slug} />
       <VisitTracker
         projectSlug={slug}
         utmSource={getSearchParam(search?.utm_source)}
