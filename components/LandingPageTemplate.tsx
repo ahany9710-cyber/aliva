@@ -2,8 +2,7 @@
 
 import dynamic from "next/dynamic";
 import type { ProjectContent } from "@/types/project";
-import type { NextSearchParams } from "@/types/next";
-import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
+import { isAlivaLandingSlug } from "@/lib/aliva-landing";
 import { MinimalHeader } from "@/components/layout/MinimalHeader";
 import { MinimalFooter } from "@/components/layout/MinimalFooter";
 import { StickyMobileCTA } from "@/components/layout/StickyMobileCTA";
@@ -45,31 +44,27 @@ const FinalCTASection = dynamic(
 
 interface LandingPageTemplateProps {
   project: ProjectContent;
-  searchParams?: NextSearchParams;
-  /** Override from admin page_settings (call number). */
   phoneOverride?: string;
-  /** Override from admin page_settings (WhatsApp number). */
   whatsappOverride?: string;
 }
 
 /**
  * Single landing page layout: header, all sections in order, footer, sticky mobile CTA.
- * Used by the dynamic [slug] route — add new projects by adding content only.
+ * Aliva landing at `/`.
  */
 export function LandingPageTemplate({
   project,
-  searchParams,
   phoneOverride,
   whatsappOverride,
 }: LandingPageTemplateProps) {
   const contactPhone =
     phoneOverride ?? project.phoneNumber ?? project.whatsappNumber;
   const contactWhatsapp = whatsappOverride ?? project.whatsappNumber;
-  const mvLanding = isMountainViewLandingSlug(project.slug);
+  const alivaLanding = isAlivaLandingSlug(project.slug);
 
   return (
     <>
-      {mvLanding && (
+      {alivaLanding && (
         <WindowSplashScreen shutterImageSrc="/shutters.webp" />
       )}
       <MinimalHeader
@@ -77,20 +72,20 @@ export function LandingPageTemplate({
         projectName={project.projectName}
         whatsappNumber={contactWhatsapp}
         whatsappInquiryMessage={project.whatsappInquiryMessage}
-        logoSrc={mvLanding ? "/Mountain View Logo.webp" : undefined}
-        logoAlt={mvLanding ? project.projectName : undefined}
+        logoSrc={alivaLanding ? "/Mountain View Logo.webp" : undefined}
+        logoAlt={alivaLanding ? project.projectName : undefined}
         overHero={!!project.heroVideo}
       />
-      <main className="pb-24 md:pb-0">
+      <main className="pb-16 md:pb-0">
         <HeroSection project={project} contactPhone={contactPhone} />
-        {mvLanding && (
+        {alivaLanding && (
           <UnitsCardsSection project={project} contactPhone={contactPhone} contactWhatsapp={contactWhatsapp} />
         )}
         <HighlightsSection project={project} />
         <WhyThisSection project={project} />
         <LocationSection project={project} />
         <PricingSection project={project} contactPhone={contactPhone} />
-        <LeadFormSection project={project} searchParams={searchParams} />
+        <LeadFormSection project={project} />
         <FAQSection project={project} />
         <FinalCTASection project={project} contactWhatsapp={contactWhatsapp} />
       </main>

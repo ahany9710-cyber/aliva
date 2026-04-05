@@ -3,8 +3,8 @@
 import { MessageCircle, Phone } from "lucide-react";
 import { buildProjectWhatsAppUrl, buildWhatsAppUrl } from "@/lib/utils";
 import { trackClick } from "@/lib/analytics";
-import { trackMetaContact } from "@/lib/meta-fbq";
-import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
+import { trackMetaContact } from "@/lib/meta-contact";
+import { isAlivaLandingSlug } from "@/lib/aliva-landing";
 
 interface StickyMobileCTAProps {
   projectSlug: string;
@@ -27,7 +27,7 @@ export function StickyMobileCTA({
     : buildWhatsAppUrl(whatsappNumber);
   const callDigits = (callPhone ?? whatsappNumber).replace(/\D/g, "");
   const callUrl = `tel:+${callDigits}`;
-  const mvLanding = isMountainViewLandingSlug(projectSlug);
+  const mvLanding = isAlivaLandingSlug(projectSlug);
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-[10000] p-4 bg-background/95 backdrop-blur border-t border-navy/10 md:hidden">

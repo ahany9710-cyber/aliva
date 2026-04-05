@@ -5,8 +5,8 @@ import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { buildProjectWhatsAppUrl, buildWhatsAppUrl } from "@/lib/utils";
 import { trackClick } from "@/lib/analytics";
-import { trackMetaContact } from "@/lib/meta-fbq";
-import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
+import { trackMetaContact } from "@/lib/meta-contact";
+import { isAlivaLandingSlug } from "@/lib/aliva-landing";
 
 interface MinimalHeaderProps {
   projectSlug: string;
@@ -14,7 +14,6 @@ interface MinimalHeaderProps {
   whatsappNumber: string;
   /** Optional custom pre-filled message for the WhatsApp link. When set, overrides the default inquiry message. */
   whatsappInquiryMessage?: string;
-  /** When set (e.g. for mountainview), show this logo instead of the Beitlee link and do not make it clickable. */
   logoSrc?: string;
   logoAlt?: string;
   /** When true, use a translucent bar so hero video blends through (over hero). */
@@ -22,7 +21,7 @@ interface MinimalHeaderProps {
 }
 
 export function MinimalHeader({ projectSlug, projectName, whatsappNumber, whatsappInquiryMessage, logoSrc, logoAlt, overHero }: MinimalHeaderProps) {
-  const mvLanding = isMountainViewLandingSlug(projectSlug);
+  const mvLanding = isAlivaLandingSlug(projectSlug);
   const whatsappUrl = whatsappInquiryMessage
     ? buildWhatsAppUrl(whatsappNumber, whatsappInquiryMessage)
     : projectName

@@ -9,11 +9,11 @@ interface SplashWindowProps {
   skipSplash?: boolean;
 }
 
-const STORAGE_KEY = "beitlee-mountainview-splash-seen";
+const STORAGE_KEY = "beitlee-aliva-splash-seen";
 
 /**
  * Splash that feels like a house window opening: wooden frame, panes that
- * swing open (casement style), then the real page is revealed. Mountain View only.
+ * swing open (casement style), then the real page is revealed.
  */
 export function SplashWindow({ children, skipSplash = false }: SplashWindowProps) {
   const [showSplash, setShowSplash] = useState(false);

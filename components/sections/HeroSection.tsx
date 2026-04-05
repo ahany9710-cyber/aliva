@@ -7,8 +7,8 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import type { ProjectContent } from "@/types/project";
-import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
-import { trackMetaContact } from "@/lib/meta-fbq";
+import { isAlivaLandingSlug } from "@/lib/aliva-landing";
+import { trackMetaContact } from "@/lib/meta-contact";
 
 interface HeroSectionProps {
   project: ProjectContent;
@@ -26,7 +26,7 @@ function HeroCTAs({
   ctaText: string;
   slug: string;
 }) {
-  const mountainviewLogo = isMountainViewLandingSlug(slug);
+  const mountainviewLogo = isAlivaLandingSlug(slug);
   return (
     <div className="mt-8 flex flex-wrap gap-3">
       <a
@@ -132,7 +132,7 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
   if (hasVideo) {
     return (
       <section
-        className="relative min-h-[55vh] pt-6 pb-16 md:pt-10 md:pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
+        className="relative min-h-[55vh] pt-6 pb-10 md:pt-10 md:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden"
         style={{ marginTop: -HEADER_HEIGHT, paddingTop: HEADER_HEIGHT + 24 }}
       >
         <div className="absolute inset-0 z-0">
@@ -220,8 +220,8 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
   }
 
   return (
-    <section className="relative pt-6 pb-16 md:pt-10 md:pb-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+    <section className="relative pt-6 pb-10 md:pt-10 md:pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-10 items-center">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}

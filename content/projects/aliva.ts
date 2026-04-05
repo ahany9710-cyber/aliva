@@ -1,8 +1,7 @@
 import type { ProjectContent } from "@/types/project";
 
 /**
- * Aliva landing — same content/Mountain View treatment as /mountainview with separate call & WhatsApp.
- * Replace phoneNumber and whatsappNumber (or use Admin → page settings for overrides).
+ * Aliva landing — call and WhatsApp use the same sales line (E.164 digits, no +).
  */
 export const content: ProjectContent = {
   slug: "aliva",
@@ -97,8 +96,8 @@ export const content: ProjectContent = {
   seoDescription:
     "عروض أليڤا من ماونتن ڤيو — مقدم ١٠٠ الف جنيه وتقسيط حتى ١٠ سنوات. المستقبل سيتي — القاهرة الجديدة. استفسر الآن.",
   ogImage: "https://placehold.co/1200x630/0F2140/FAFAF9?text=Aliva",
-  phoneNumber: "2010111222333",
-  whatsappNumber: "2010999888777",
+  phoneNumber: "201500980788",
+  whatsappNumber: "201500980788",
   whatsappInquiryMessage: "مساء الخير ، كنت بتواصل بخصوص ماونتن ڤيو أليڤا (صفحة أليڤا)",
   ctaText: "اتصل بـماونتن ڤيو",
   leadFormCtaText: "سجل بماونتن ڤيو",

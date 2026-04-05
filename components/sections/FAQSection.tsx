@@ -22,7 +22,7 @@ export function FAQSection({ project }: FAQSectionProps) {
         initial={sectionVariants.initial}
         whileInView={sectionVariants.animate}
         viewport={sectionVariants.viewport}
-        className="text-2xl font-bold text-navy mb-8 text-center"
+        className="text-2xl font-bold text-navy mb-5 text-center"
       >
         أسئلة شائعة
       </motion.h2>

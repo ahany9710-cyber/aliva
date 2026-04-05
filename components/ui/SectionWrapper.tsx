@@ -16,7 +16,7 @@ export function SectionWrapper({
   return (
     <section
       id={id}
-      className={cn("py-16 md:py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto", className)}
+      className={cn("py-10 md:py-14 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto", className)}
     >
       {children}
     </section>

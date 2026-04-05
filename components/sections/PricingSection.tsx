@@ -6,8 +6,8 @@ import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Button } from "@/components/ui/Button";
 import { fadeInUp, noMotion } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
-import { isMountainViewLandingSlug } from "@/lib/mountain-view-landing";
-import { trackMetaContact } from "@/lib/meta-fbq";
+import { isAlivaLandingSlug } from "@/lib/aliva-landing";
+import { trackMetaContact } from "@/lib/meta-contact";
 
 interface PricingSectionProps {
   project: ProjectContent;
@@ -48,7 +48,7 @@ export function PricingSection({ project, contactPhone }: PricingSectionProps) {
           onClick={() => trackMetaContact(project.slug, "phone_pricing")}
         >
           <Button size="lg" className="gap-2">
-            {isMountainViewLandingSlug(project.slug) ? (
+            {isAlivaLandingSlug(project.slug) ? (
               <img src="/mountainview-emblem-white.webp" alt="" aria-hidden className="w-7 h-7 object-contain" />
             ) : (
               <Phone size={18} aria-hidden />

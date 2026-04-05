@@ -1,19 +1,27 @@
 import type { NextConfig } from "next";
 
-const cspDirectives = [
-  "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google.com https://www.gstatic.com https://www.clarity.ms https://*.clarity.ms https://connect.facebook.net",
-  "connect-src 'self' https://*.supabase.co https://www.google-analytics.com https://www.googletagmanager.com https://www.google.com https://googleads.g.doubleclick.net https://region1.analytics.google.com https://region1.google-analytics.com https://*.clarity.ms https://c.bing.com https://www.facebook.com https://connect.facebook.net",
-  "img-src 'self' data: blob: https: https://www.google.com https://www.google-analytics.com https://www.googletagmanager.com https://googleads.g.doubleclick.net https://www.facebook.com",
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "font-src 'self' https://fonts.gstatic.com",
-  "frame-src 'self' https://www.google.com",
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "frame-ancestors 'none'",
-  "upgrade-insecure-requests",
-].join("; ");
+function buildCspDirectives(): string {
+  const parts = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+    // Dev: allow Turbopack / HMR WebSockets (same host, different scheme)
+    `connect-src 'self' https://formspree.io${process.env.NODE_ENV !== "production" ? " ws: wss:" : ""}`,
+    "img-src 'self' data: blob: https:",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "media-src 'self' blob:",
+    "frame-src 'self'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+  ];
+  // Never use on http://localhost — browser upgrades subresources to https and the tab can stay blank.
+  if (process.env.NODE_ENV === "production") {
+    parts.push("upgrade-insecure-requests");
+  }
+  return parts.join("; ");
+}
 
 const nextConfig: NextConfig = {
   images: {
@@ -31,6 +39,9 @@ const nextConfig: NextConfig = {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
+  async redirects() {
+    return [{ source: "/aliva", destination: "/", permanent: true }];
+  },
   async headers() {
     return [
       {
@@ -38,7 +49,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Content-Security-Policy",
-            value: cspDirectives,
+            value: buildCspDirectives(),
           },
           {
             key: "X-Content-Type-Options",

@@ -88,12 +88,12 @@ export function LocationSection({ project }: LocationSectionProps) {
         initial={sectionVariants.initial}
         whileInView={sectionVariants.animate}
         viewport={sectionVariants.viewport}
-        className="text-2xl font-bold text-navy mb-6 flex items-center gap-2"
+        className="text-2xl font-bold text-navy mb-4 flex items-center gap-2"
       >
         <Map size={24} className="text-gold shrink-0" aria-hidden />
         الموقع و خريطة المشروع
       </motion.h2>
-      <p className="text-muted mb-6">{project.location}</p>
+      <p className="text-muted mb-4">{project.location}</p>
 
       {/* Thumbnail */}
       <button

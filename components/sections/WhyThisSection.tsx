@@ -19,7 +19,7 @@ export function WhyThisSection({ project }: WhyThisSectionProps) {
         initial={sectionVariants.initial}
         whileInView={sectionVariants.animate}
         viewport={sectionVariants.viewport}
-        className="text-2xl font-bold text-navy mb-10 text-center"
+        className="text-2xl font-bold text-navy mb-6 text-center"
       >
         لماذا تختار {project.projectName}؟
       </motion.h2>

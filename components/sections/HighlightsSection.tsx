@@ -38,7 +38,7 @@ export function HighlightsSection({ project }: HighlightsSectionProps) {
         initial={sectionVariants.initial}
         whileInView={sectionVariants.animate}
         viewport={sectionVariants.viewport}
-        className="text-2xl font-bold text-navy mb-6"
+        className="text-2xl font-bold text-navy mb-5"
       >
         أبرز المعلومات
       </motion.h2>

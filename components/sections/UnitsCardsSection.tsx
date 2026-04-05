@@ -7,9 +7,8 @@ import { ArrowLeft, ChevronRight, ChevronLeft, X, Phone, MessageCircle } from "l
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { buildWhatsAppUrl } from "@/lib/utils";
 import type { ProjectContent } from "@/types/project";
-import { trackMetaContact } from "@/lib/meta-fbq";
-
-const CTA_TEXT = "احصل على عرض سعر";
+import { trackMetaContact } from "@/lib/meta-contact";
+import { ALIVA_UNIT_CARD_LABELS } from "@/lib/aliva-units";
 
 /** Add unit-1.jpg … unit-3.jpg to public/ for each card photo, or use your own paths. */
 const UNIT_IMAGES = ["/unit-1.jpg", "/unit-2.jpg", "/unit-3.jpg"];
@@ -103,12 +102,6 @@ function UnitCard({
     </article>
   );
 }
-
-const UNIT_TITLES: Record<number, string> = {
-  1: "شقة ٣ غرف",
-  2: "أي ڤيلا",
-  3: "تاون هاوس",
-};
 
 interface UnitsCardsSectionProps {
   project: ProjectContent;
@@ -207,14 +200,14 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
   const unit = selectedUnit !== null ? UNIT_DETAILS[selectedUnit - 1] : null;
   const whatsappMessage =
     unit &&
-    `مرحباً، أريد الاستفسار عن الوحدة: ${UNIT_TITLES[selectedUnit as number]} - المشروع ${unit.project}`;
+    `مرحباً، أريد الاستفسار عن الوحدة: ${ALIVA_UNIT_CARD_LABELS[selectedUnit as number]} - المشروع ${unit.project}`;
   const whatsappUrl = project
     ? buildWhatsAppUrl(whatsapp, whatsappMessage ?? undefined)
     : "#";
   const telUrl = project ? `tel:+${phone.replace(/\D/g, "")}` : "#";
 
   return (
-    <SectionWrapper id="units" className="py-12 md:py-16">
+    <SectionWrapper id="units" className="py-8 md:py-10">
       <p className="text-center text-muted text-sm md:text-base mb-4">
         اضغط على الوحدة لعرض تفاصيلها
       </p>
@@ -230,7 +223,7 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
               key={i}
               index={i}
               imageSrc={UNIT_IMAGES[i - 1]}
-              title={UNIT_TITLES[i]}
+              title={ALIVA_UNIT_CARD_LABELS[i]}
               onClick={() => setSelectedUnit(i)}
             />
           ))}
@@ -305,7 +298,7 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
             </div>
             <div className="p-4 sm:p-6 md:p-8 pt-14 sm:pt-6">
               <h2 id="unit-modal-title" className="text-lg sm:text-xl font-bold text-navy mb-4 sm:mb-6">
-                {UNIT_TITLES[selectedUnit]}
+                {ALIVA_UNIT_CARD_LABELS[selectedUnit]}
               </h2>
               <dl className="space-y-2.5 sm:space-y-3 text-navy text-base">
                 <div>
