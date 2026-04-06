@@ -238,7 +238,7 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
             className="order-2 md:order-1"
           >
             {project.offerBadge && (
-              <Badge variant="gold" className="mb-4 text-white">
+              <Badge variant="hot" className="mb-4">
                 {project.offerBadge}
               </Badge>
             )}
@@ -274,7 +274,7 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
           className="order-2 md:order-1"
         >
           {project.offerBadge && (
-            <Badge variant="gold" className="mb-4">
+            <Badge variant="hotLight" className="mb-4">
               {project.offerBadge}
             </Badge>
           )}

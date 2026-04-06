@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     template: "%s",
   },
   description:
-    "شقق وأي ڤيلا وتاون هاوس في المستقبل سيتي — مقدم ١٠٠ ألف جنيه وتقسيط حتى ١٠ سنوات.",
+    "شقق وآي ڤيلا وتاون هاوس في المستقبل سيتي — مقدم ١٠٠ ألف جنيه وتقسيط حتى ١٠ سنوات.",
 };
 
 export default function RootLayout({

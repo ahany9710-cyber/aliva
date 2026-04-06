@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion, useInView } from "framer-motion";
 import {
   ArrowLeft,
   ChevronRight,
@@ -163,6 +163,8 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
   const phone = contactPhone ?? project.phoneNumber ?? project.whatsappNumber;
   const whatsapp = contactWhatsapp ?? project.whatsappNumber;
   const scrollRef = useRef<HTMLDivElement>(null);
+  const bannerRef = useRef<HTMLDivElement>(null);
+  const bannerInView = useInView(bannerRef, { once: true, margin: "0px 0px -60px 0px" });
   const [selectedUnit, setSelectedUnit] = useState<number | null>(null);
   const [modalImageError, setModalImageError] = useState(false);
   const [scrollBounds, setScrollBounds] = useState({ atStart: true, atEnd: false });
@@ -260,10 +262,88 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
     >
       <p className="text-center text-muted text-sm md:text-base mb-1">اختر وحدة</p>
       <h2 className="text-center text-lg md:text-xl font-bold text-navy mb-5">تشكيلة الوحدات المتاحة</h2>
-      <div className="relative">
+      <div className="relative group/units">
+        {/* ───── Hot Offer Banner ───── */}
+        <motion.div
+          ref={bannerRef}
+          role="note"
+          initial={{ opacity: 0, y: 18 }}
+          animate={bannerInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="relative mb-5 overflow-hidden rounded-xl bg-navy shadow-[0_8px_32px_rgba(11,31,58,0.22)] ring-1 ring-white/6 transition-shadow duration-300 ease-out group-hover/units:shadow-[0_14px_40px_rgba(11,31,58,0.32)]"
+        >
+          {/* amber top accent line — draws RTL on entrance */}
+          <motion.div
+            aria-hidden
+            initial={{ scaleX: 0 }}
+            animate={bannerInView ? { scaleX: 1 } : {}}
+            transition={{ duration: 0.7, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-x-0 top-0 h-[3px] origin-right bg-gradient-to-l from-amber-600 via-amber-400 to-amber-500/55"
+          />
+
+          <div className="px-4 pb-4 pt-[18px] md:px-5 md:pb-5">
+            {/* label row */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={bannerInView ? { opacity: 1 } : {}}
+              transition={{ duration: 0.4, delay: 0.28 }}
+              className="mb-3.5 flex items-center justify-between"
+            >
+              <span className="flex items-center gap-1.5 text-[0.65rem] font-extrabold uppercase tracking-[0.2em] text-amber-400">
+                <span className="relative flex h-1.5 w-1.5 shrink-0" aria-hidden>
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-70 motion-safe:animate-ping" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-amber-400" />
+                </span>
+                عرض حصري — لفترة محدودة
+              </span>
+              <span className="rounded-full border border-white/10 bg-white/6 px-2.5 py-0.5 text-[0.6rem] font-semibold text-white/40">
+                أليڤا · ماونتن ڤيو
+              </span>
+            </motion.div>
+
+            {/* two stats */}
+            <div className="grid grid-cols-[1fr_1px_1fr] items-center gap-2">
+              <motion.div
+                className="text-center"
+                initial={{ opacity: 0, y: 10 }}
+                animate={bannerInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.45, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <p className="text-[1.65rem] font-extrabold leading-none tabular-nums tracking-tight text-white md:text-[2rem]">
+                  ١٠٠ ألف
+                </p>
+                <p className="mt-1.5 text-xs font-medium text-white/55">
+                  جنيه — مقدم الحجز
+                </p>
+              </motion.div>
+
+              <motion.div
+                aria-hidden
+                className="h-9 w-px self-center bg-white/12 md:h-11"
+                initial={{ scaleY: 0 }}
+                animate={bannerInView ? { scaleY: 1 } : {}}
+                transition={{ duration: 0.35, delay: 0.52 }}
+              />
+
+              <motion.div
+                className="text-center"
+                initial={{ opacity: 0, y: 10 }}
+                animate={bannerInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.45, delay: 0.46, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <p className="text-[1.65rem] font-extrabold leading-none tabular-nums tracking-tight text-white md:text-[2rem]">
+                  ١٢ سنة
+                </p>
+                <p className="mt-1.5 text-xs font-medium text-white/55">
+                  أقصى مدة تقسيط
+                </p>
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
         <div
           ref={scrollRef}
-          className="flex gap-4 md:gap-5 overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory py-3 -mx-4 ps-4 pe-2 md:-mx-6 md:ps-6 md:pe-4 scrollbar-hide"
+          className="flex gap-4 md:gap-5 overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory py-3 -mx-4 ps-4 pe-2 md:-mx-6 md:ps-6 md:pe-4 scrollbar-hide transition-[filter] duration-200 group-hover/units:[&_article]:brightness-[1.015]"
           aria-label="قائمة الوحدات — اسحب لعرض البطاقات"
         >
           {[1, 2, 3].map((i) => (
