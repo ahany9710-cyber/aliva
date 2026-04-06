@@ -66,7 +66,5 @@ export function MinimalFooter({ mvStyle = false, projectName }: MinimalFooterPro
     );
   }
 
-  return (
-    <footer className="border-t border-navy/10 bg-navy/5 py-6 px-4 sm:px-6 lg:px-8" aria-hidden />
-  );
+  return null;
 }
