@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { Facebook, Instagram, Youtube } from "lucide-react";
 
 interface MinimalFooterProps {
@@ -63,39 +62,11 @@ export function MinimalFooter({ mvStyle = false, projectName }: MinimalFooterPro
             </div>
           </div>
         </div>
-
-        <div className="max-w-6xl mx-auto mt-10 pt-8 border-t border-white/10 text-center text-xs text-white/50">
-          <p>
-            This page has been designed by{" "}
-            <a
-              href="https://www.facebook.com/themartining"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white/70 hover:text-white hover:underline"
-            >
-              The Martining Innovation Studio
-            </a>
-          </p>
-        </div>
       </footer>
     );
   }
 
   return (
-    <footer className="border-t border-navy/10 bg-navy/5 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto text-center text-sm text-muted">
-        <p>
-          This page has been designed by{" "}
-          <Link
-            href="https://www.facebook.com/themartining"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-navy hover:underline"
-          >
-            The Martining Innovation Studio
-          </Link>
-        </p>
-      </div>
-    </footer>
+    <footer className="border-t border-navy/10 bg-navy/5 py-6 px-4 sm:px-6 lg:px-8" aria-hidden />
   );
 }
