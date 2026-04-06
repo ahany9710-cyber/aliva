@@ -117,11 +117,6 @@ function UnitCard({
             className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy/55 via-navy/10 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100"
             aria-hidden
           />
-          <div className="absolute bottom-3 right-3 left-3 flex items-end justify-between gap-2">
-            <span className="rounded bg-white/95 px-2.5 py-1 text-xs font-semibold text-navy shadow-sm backdrop-blur-sm">
-              وحدة {index}
-            </span>
-          </div>
         </div>
         <div className="border-t border-navy/8 bg-gradient-to-b from-white to-slate-50/80 px-4 py-3.5 sm:px-5 sm:py-4">
           <p className="font-bold text-navy text-base sm:text-lg leading-snug group-hover:text-sky-800 transition-colors">
