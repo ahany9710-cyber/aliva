@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FAFAF9;
-  --foreground: #0F2140;
-  --navy: #0F2140;
-  --gold: #C9982A;
-  --muted: #6B7280;
+  --background: #ffffff;
+  --foreground: #0b1f3a;
+  --navy: #0b1f3a;
+  --gold: #c9982a;
+  --muted: #6b7280;
   /* English: Helvetica Neue; Arabic: Cairo (Cairo before Arial so Arabic uses Cairo, not Arial) */
   --font-sans-en: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-sans: "Helvetica Neue", Helvetica, var(--font-cairo), Arial, sans-serif;
@@ -36,4 +36,13 @@ body {
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Mountain View–style small caps section kicker */
+.section-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
 }

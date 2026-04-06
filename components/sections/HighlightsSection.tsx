@@ -1,75 +1,108 @@
 "use client";
 
-import {
-  MapPin,
-  Home,
-  Building2,
-  Calendar,
-  Wallet,
-  BarChart3,
-  type LucideIcon,
-} from "lucide-react";
+import Link from "next/link";
+import { MessageCircle, PhoneCall } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
-import { fadeInUp, fadeInUpStagger, noMotion, noMotionStagger } from "@/lib/motion";
+import { Button } from "@/components/ui/Button";
+import { buildProjectWhatsAppUrl } from "@/lib/utils";
+import { fadeInUp, noMotion } from "@/lib/motion";
 import type { ProjectContent } from "@/types/project";
-
-const HIGHLIGHT_ICONS: Record<string, LucideIcon> = {
-  location: MapPin,
-  home: Home,
-  building: Building2,
-  calendar: Calendar,
-  wallet: Wallet,
-  chart: BarChart3,
-};
+import { trackMetaContact } from "@/lib/meta-contact";
 
 interface HighlightsSectionProps {
   project: ProjectContent;
+  contactPhone?: string;
+  contactWhatsapp?: string;
 }
 
-export function HighlightsSection({ project }: HighlightsSectionProps) {
+export function HighlightsSection({
+  project,
+  contactPhone,
+  contactWhatsapp,
+}: HighlightsSectionProps) {
+  const phone = contactPhone ?? project.phoneNumber ?? project.whatsappNumber;
+  const callUrl = `tel:+${phone.replace(/\D/g, "")}`;
+  const whatsappNumber = contactWhatsapp ?? project.whatsappNumber;
+  const whatsappUrl = buildProjectWhatsAppUrl(
+    { ...project, whatsappNumber },
+    "inquiry"
+  );
   const reducedMotion = useReducedMotion();
   const sectionVariants = reducedMotion ? noMotion : fadeInUp;
-  const staggerVariants = reducedMotion ? noMotionStagger : fadeInUpStagger;
 
   return (
-    <SectionWrapper id="highlights" className="bg-white rounded-2xl shadow-sm">
+    <SectionWrapper
+      id="highlights"
+      className="py-10 md:py-12 border-t border-b border-navy/10 bg-white"
+    >
+      <motion.p
+        initial={sectionVariants.initial}
+        whileInView={sectionVariants.animate}
+        viewport={sectionVariants.viewport}
+        className="section-label mb-3 text-center"
+      >
+        تواصل مع المبيعات
+      </motion.p>
       <motion.h2
         initial={sectionVariants.initial}
         whileInView={sectionVariants.animate}
         viewport={sectionVariants.viewport}
-        className="text-2xl font-bold text-navy mb-5"
+        className="text-2xl sm:text-3xl font-bold text-navy mb-3 text-center"
       >
-        أبرز المعلومات
+        جاهز للخطوة التالية؟
       </motion.h2>
-
-      {/* Stats highlights */}
-      <motion.div
-        variants={staggerVariants.container}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true }}
-        className="grid grid-cols-2 sm:grid-cols-3 gap-3"
+      <motion.p
+        initial={sectionVariants.initial}
+        whileInView={sectionVariants.animate}
+        viewport={sectionVariants.viewport}
+        className="text-center text-muted max-w-xl mx-auto text-sm sm:text-base leading-relaxed"
       >
-        {project.highlights.map((point, index) => {
-          const Icon = HIGHLIGHT_ICONS[point.icon] ?? BarChart3;
-          return (
-            <motion.div
-              key={`${point.label}-${index}`}
-              variants={staggerVariants.item}
-              className="p-3 rounded-xl border border-navy/10 bg-background flex gap-2.5 items-start"
-            >
-              <span className="shrink-0 text-gold mt-0.5" aria-hidden>
-                <Icon size={18} strokeWidth={1.8} />
-              </span>
-              <div>
-                <span className="text-muted text-sm">{point.label}</span>
-                <p className="font-semibold text-navy text-base mt-0.5 leading-snug">{point.value}</p>
-              </div>
-            </motion.div>
-          );
-        })}
+        اتصل أو راسلنا على واتساب — فريق ماونتن ڤيو يساعدك في اختيار الوحدة وخطة السداد بدون التزام.
+      </motion.p>
+      <motion.div
+        initial={sectionVariants.initial}
+        whileInView={sectionVariants.animate}
+        viewport={sectionVariants.viewport}
+        className="mt-8 flex flex-wrap items-center justify-center gap-3"
+      >
+        <a
+          href={callUrl}
+          onClick={() => trackMetaContact(project.slug, "phone_highlights")}
+          className="inline-flex"
+        >
+          <Button size="lg" className="gap-2">
+            <PhoneCall size={18} aria-hidden />
+            {project.ctaText}
+          </Button>
+        </a>
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => trackMetaContact(project.slug, "whatsapp_highlights")}
+          className="inline-flex"
+        >
+          <Button variant="mv-outline" size="lg" className="gap-2 bg-white border-navy/20">
+            <MessageCircle size={18} aria-hidden />
+            تواصل مع فريق المبيعات
+          </Button>
+        </a>
       </motion.div>
+      <motion.p
+        initial={sectionVariants.initial}
+        whileInView={sectionVariants.animate}
+        viewport={sectionVariants.viewport}
+        className="mt-6 text-center text-sm text-muted"
+      >
+        تفضّل النموذج؟{" "}
+        <Link
+          href="#lead-form"
+          className="font-medium text-navy underline underline-offset-2 hover:text-sky-800"
+        >
+          {project.leadFormCtaText ?? "سجّل اهتمامك"}
+        </Link>
+      </motion.p>
     </SectionWrapper>
   );
 }

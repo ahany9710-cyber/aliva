@@ -10,11 +10,11 @@ const cairo = Cairo({
 
 export const metadata: Metadata = {
   title: {
-    default: "أليڤا | ماونتن ڤيو — المستقبل سيتي",
+    default: "أليڤا ماونتن ڤيو | المستقبل سيتي",
     template: "%s",
   },
   description:
-    "مشروع أليڤا السكني في المستقبل سيتي — وحدات متنوعة وخطط تقسيط مرنة من ماونتن ڤيو.",
+    "شقق وأي ڤيلا وتاون هاوس في المستقبل سيتي — مقدم ١٠٠ ألف جنيه وتقسيط حتى ١٠ سنوات.",
 };
 
 export default function RootLayout({

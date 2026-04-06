@@ -2,8 +2,19 @@
 
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ChevronRight, ChevronLeft, X, Phone, MessageCircle } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import {
+  ArrowLeft,
+  ChevronRight,
+  ChevronLeft,
+  X,
+  Phone,
+  MessageCircle,
+  Home,
+  Maximize,
+  Banknote,
+  MapPin,
+} from "lucide-react";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { buildWhatsAppUrl } from "@/lib/utils";
 import type { ProjectContent } from "@/types/project";
@@ -53,6 +64,9 @@ const UNIT_DETAILS: UnitDetails[] = [
   },
 ];
 
+const cardTap = { scale: 0.97 };
+const cardHover = { y: -6, transition: { type: "spring" as const, stiffness: 400, damping: 22 } };
+
 function UnitCard({
   index,
   imageSrc,
@@ -65,41 +79,64 @@ function UnitCard({
   onClick: () => void;
 }) {
   const [imageError, setImageError] = useState(false);
+  const reduceMotion = useReducedMotion();
+
   return (
-    <article className="shrink-0 w-[calc(50vw-1.5rem)] sm:w-[280px] md:w-[380px] snap-start snap-always">
-      <button
+    <motion.article
+      layout
+      className="shrink-0 w-[calc(50vw-1.5rem)] sm:w-[280px] md:w-[360px] snap-start snap-always"
+    >
+      <motion.button
         type="button"
         onClick={onClick}
-        className="group w-full text-right block overflow-hidden rounded-2xl md:rounded-3xl bg-white shadow-[0_4px_24px_rgba(15,33,64,0.08)] hover:shadow-[0_12px_40px_rgba(15,33,64,0.12)] transition-all duration-300"
+        whileTap={reduceMotion ? undefined : cardTap}
+        whileHover={reduceMotion ? undefined : cardHover}
+        transition={{ type: "spring", stiffness: 420, damping: 28 }}
+        className="group w-full text-right block overflow-hidden rounded-xl border border-navy/12 bg-white shadow-[0_8px_30px_rgba(11,31,58,0.08)] ring-1 ring-navy/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-navy/40 focus-visible:ring-offset-2"
       >
-        <div className="aspect-[4/3] relative bg-gradient-to-br from-navy/10 to-navy/5 overflow-hidden">
+        <div className="aspect-[4/3] relative overflow-hidden bg-gradient-to-br from-navy/[0.07] to-sky-50/40">
           {!imageError && imageSrc ? (
             <Image
               src={imageSrc}
               alt=""
               fill
-              className="object-cover"
-              sizes="(max-width: 640px) 50vw, (max-width: 768px) 280px, 380px"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+              sizes="(max-width: 640px) 50vw, (max-width: 768px) 280px, 360px"
               quality={75}
               onError={() => setImageError(true)}
             />
           ) : (
-            <span className="absolute inset-0 flex items-center justify-center text-2xl md:text-4xl font-bold text-navy/20" aria-hidden>
+            <span
+              className="absolute inset-0 flex items-center justify-center text-2xl md:text-4xl font-bold text-navy/15"
+              aria-hidden
+            >
               {index}
             </span>
           )}
+          <div
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-navy/55 via-navy/10 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-100"
+            aria-hidden
+          />
+          <div className="absolute bottom-3 right-3 left-3 flex items-end justify-between gap-2">
+            <span className="rounded bg-white/95 px-2.5 py-1 text-xs font-semibold text-navy shadow-sm backdrop-blur-sm">
+              وحدة {index}
+            </span>
+          </div>
         </div>
-        <div className="p-3 sm:p-4 md:p-6">
-          <p className="font-semibold text-navy text-base sm:text-base md:text-lg group-hover:text-gold transition-colors leading-tight">
+        <div className="border-t border-navy/8 bg-gradient-to-b from-white to-slate-50/80 px-4 py-3.5 sm:px-5 sm:py-4">
+          <p className="font-bold text-navy text-base sm:text-lg leading-snug group-hover:text-sky-800 transition-colors">
             {title}
           </p>
-          <span className="inline-flex items-center gap-1 mt-1.5 md:mt-2 text-sm md:text-base text-gold font-medium" aria-hidden>
-            <span>تفاصيل الوحدة</span>
-            <ArrowLeft size={14} className="md:w-4 md:h-4" />
+          <span
+            className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-sky-800"
+            aria-hidden
+          >
+            <span>عرض التفاصيل</span>
+            <ArrowLeft size={15} className="transition-transform duration-300 group-hover:-translate-x-0.5" />
           </span>
         </div>
-      </button>
-    </article>
+      </motion.button>
+    </motion.article>
   );
 }
 
@@ -110,6 +147,22 @@ interface UnitsCardsSectionProps {
 }
 
 const SCROLL_EPS = 2;
+
+const backdropVariants = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { duration: 0.2 } },
+};
+
+const contentStagger = {
+  show: {
+    transition: { staggerChildren: 0.06, delayChildren: 0.08 },
+  },
+};
+
+const rowFade = {
+  hidden: { opacity: 0, y: 8 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.25 } },
+};
 
 export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: UnitsCardsSectionProps) {
   const phone = contactPhone ?? project.phoneNumber ?? project.whatsappNumber;
@@ -135,7 +188,6 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
     const atEnd = isRtl ? scrollLeft <= -maxScroll + SCROLL_EPS : scrollLeft >= maxScroll - SCROLL_EPS;
     setScrollBounds({ atStart, atEnd });
 
-    // When scroll settles, snap to exact end/start so no gap appears beside the last or first card
     if (snapToBoundsRef.current) clearTimeout(snapToBoundsRef.current);
     snapToBoundsRef.current = setTimeout(() => {
       snapToBoundsRef.current = null;
@@ -207,15 +259,16 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
   const telUrl = project ? `tel:+${phone.replace(/\D/g, "")}` : "#";
 
   return (
-    <SectionWrapper id="units" className="py-8 md:py-10">
-      <p className="text-center text-muted text-sm md:text-base mb-4">
-        اضغط على الوحدة لعرض تفاصيلها
-      </p>
+    <SectionWrapper
+      id="units"
+      className="py-8 md:py-10 rounded-xl border border-navy/8 bg-gradient-to-b from-slate-50/60 via-white to-sky-50/30"
+    >
+      <p className="text-center text-muted text-sm md:text-base mb-1">اختر وحدة</p>
+      <h2 className="text-center text-lg md:text-xl font-bold text-navy mb-5">تشكيلة الوحدات المتاحة</h2>
       <div className="relative">
-        {/* Slide track */}
         <div
           ref={scrollRef}
-          className="flex gap-5 overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory py-2 -mx-4 ps-4 pe-0 md:-mx-6 md:ps-6 md:pe-0 scrollbar-hide"
+          className="flex gap-4 md:gap-5 overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory py-3 -mx-4 ps-4 pe-2 md:-mx-6 md:ps-6 md:pe-4 scrollbar-hide"
           aria-label="قائمة الوحدات — اسحب لعرض البطاقات"
         >
           {[1, 2, 3].map((i) => (
@@ -228,13 +281,12 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
             />
           ))}
         </div>
-        {/* Left / Right arrows — show on all screens; disabled at scroll bounds to avoid overflow bug */}
         <button
           type="button"
           onClick={() => scroll("prev")}
           disabled={scrollBounds.atStart}
           aria-label="البطاقة السابقة"
-          className="absolute top-1/2 -translate-y-1/2 right-0 w-11 h-11 md:w-11 md:h-11 rounded-full bg-white/95 shadow-md border border-navy/10 flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors z-10 disabled:opacity-40 disabled:pointer-events-none"
+          className="absolute top-1/2 -translate-y-1/2 right-0 w-11 h-11 rounded-full bg-white/95 shadow-md border border-navy/10 flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors z-10 disabled:opacity-40 disabled:pointer-events-none"
         >
           <ChevronRight size={20} />
         </button>
@@ -243,115 +295,141 @@ export function UnitsCardsSection({ project, contactPhone, contactWhatsapp }: Un
           onClick={() => scroll("next")}
           disabled={scrollBounds.atEnd}
           aria-label="البطاقة التالية"
-          className="absolute top-1/2 -translate-y-1/2 left-0 w-11 h-11 md:w-11 md:h-11 rounded-full bg-white/95 shadow-md border border-navy/10 flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors z-10 disabled:opacity-40 disabled:pointer-events-none"
+          className="absolute top-1/2 -translate-y-1/2 left-0 w-11 h-11 rounded-full bg-white/95 shadow-md border border-navy/10 flex items-center justify-center text-navy hover:bg-navy hover:text-white transition-colors z-10 disabled:opacity-40 disabled:pointer-events-none"
         >
           <ChevronLeft size={20} />
         </button>
       </div>
 
-      {/* Unit details modal — slides up from bottom, slides down on close */}
       <AnimatePresence>
         {selectedUnit !== null && unit ? (
           <motion.div
             key="unit-modal"
-            initial={{ y: "100%" }}
-            animate={{ y: 0 }}
-            exit={{ y: "100%" }}
-            transition={{ type: "tween", duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/50"
+            variants={backdropVariants}
+            initial="hidden"
+            animate="show"
+            exit="hidden"
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/55 backdrop-blur-[2px]"
             onClick={() => setSelectedUnit(null)}
             role="dialog"
             aria-modal
             aria-labelledby="unit-modal-title"
           >
-            <div
-              className="relative bg-white rounded-t-3xl sm:rounded-3xl shadow-xl max-w-md w-full overflow-y-auto overflow-x-hidden [-webkit-overflow-scrolling:touch] pb-[env(safe-area-inset-bottom,0px)]"
-              style={{ maxHeight: "min(85dvh, calc(100vh - 80px))" }}
+            <motion.div
+              initial={{ y: "100%", opacity: 0.88 }}
+              animate={{
+                y: 0,
+                opacity: 1,
+                transition: { type: "spring", stiffness: 320, damping: 32 },
+              }}
+              exit={{ y: "100%", opacity: 0.92, transition: { duration: 0.22 } }}
+              className="relative w-full max-w-lg sm:max-w-md overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white shadow-2xl ring-1 ring-navy/10"
+              style={{ maxHeight: "min(88dvh, calc(100vh - 72px))" }}
               onClick={(e) => e.stopPropagation()}
             >
-            {/* Close button — 44px min touch target, top-left */}
-            <button
-              type="button"
-              onClick={() => setSelectedUnit(null)}
-              className="absolute top-3 left-3 z-10 w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-white/95 shadow-md border border-navy/10 flex items-center justify-center text-navy hover:bg-navy hover:text-white active:bg-navy/10 touch-manipulation"
-              aria-label="إغلاق"
-            >
-              <X size={22} strokeWidth={2.5} />
-            </button>
-            {/* Unit photo */}
-            <div className="relative w-full h-32 sm:h-44 rounded-t-3xl overflow-hidden bg-gradient-to-br from-navy/10 to-navy/5">
-              {!modalImageError ? (
-                <Image
-                  src={UNIT_IMAGES[selectedUnit - 1]}
-                  alt=""
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 448px) 100vw, 448px"
-                  quality={75}
-                  onError={() => setModalImageError(true)}
-                />
-              ) : (
-                <span className="absolute inset-0 flex items-center justify-center text-3xl font-bold text-navy/20" aria-hidden>
-                  {selectedUnit}
-                </span>
-              )}
-            </div>
-            <div className="p-4 sm:p-6 md:p-8 pt-14 sm:pt-6">
-              <h2 id="unit-modal-title" className="text-lg sm:text-xl font-bold text-navy mb-4 sm:mb-6">
-                {ALIVA_UNIT_CARD_LABELS[selectedUnit]}
-              </h2>
-              <dl className="space-y-2.5 sm:space-y-3 text-navy text-base">
-                <div>
-                  <dt className="text-muted text-base">المشروع</dt>
-                  <dd className="font-medium">{unit.project}</dd>
+              <div className="absolute inset-x-0 top-0 z-20 h-1.5 bg-gradient-to-l from-navy via-sky-700 to-sky-500" aria-hidden />
+
+              <button
+                type="button"
+                onClick={() => setSelectedUnit(null)}
+                className="absolute top-4 left-4 z-30 w-11 h-11 min-w-[44px] min-h-[44px] rounded-full bg-white shadow-md border border-navy/10 flex items-center justify-center text-navy hover:bg-navy hover:text-white touch-manipulation"
+                aria-label="إغلاق"
+              >
+                <X size={22} strokeWidth={2.5} />
+              </button>
+
+              <div className="relative h-40 sm:h-48 w-full overflow-hidden bg-navy">
+                {!modalImageError ? (
+                  <Image
+                    src={UNIT_IMAGES[selectedUnit - 1]}
+                    alt=""
+                    fill
+                    className="object-cover opacity-95"
+                    sizes="(max-width: 448px) 100vw, 448px"
+                    quality={75}
+                    onError={() => setModalImageError(true)}
+                  />
+                ) : (
+                  <span
+                    className="absolute inset-0 flex items-center justify-center text-4xl font-bold text-white/25"
+                    aria-hidden
+                  >
+                    {selectedUnit}
+                  </span>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/50 to-transparent" />
+                <div className="absolute bottom-0 right-0 left-0 p-5 pt-12 text-white">
+                  <p className="text-xs font-medium uppercase tracking-widest text-white/70">أليڤا · ماونتن ڤيو</p>
+                  <h2 id="unit-modal-title" className="text-xl sm:text-2xl font-bold leading-tight mt-1">
+                    {ALIVA_UNIT_CARD_LABELS[selectedUnit]}
+                  </h2>
                 </div>
-                <div>
-                  <dt className="text-muted text-base">المطور</dt>
-                  <dd className="font-medium">{unit.developer}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted text-base">الموقع</dt>
-                  <dd className="font-medium">{unit.location}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted text-base">عدد الغرف</dt>
-                  <dd className="font-medium">{unit.rooms}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted text-base">المساحة</dt>
-                  <dd className="font-medium">{unit.area}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted text-base">السعر</dt>
-                  <dd className="font-medium">{unit.price}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted text-base">المقدم والتقسيط</dt>
-                  <dd className="font-medium">{unit.downPayment}</dd>
-                </div>
-              </dl>
-              <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3">
-                <a
-                  href={telUrl}
-                  className="min-h-[48px] inline-flex items-center justify-center gap-2 rounded-xl bg-navy text-white py-3.5 px-5 font-medium hover:bg-navy/90 active:opacity-90 transition-colors touch-manipulation"
-                  onClick={() => trackMetaContact(project.slug, "phone_unit_modal")}
-                >
-                  <Phone size={20} aria-hidden />
-                  اتصال
-                </a>
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="min-h-[48px] inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] text-white py-3.5 px-5 font-medium hover:bg-[#20bd5a] active:opacity-90 transition-colors touch-manipulation"
-                  onClick={() => trackMetaContact(project.slug, "whatsapp_unit_modal")}
-                >
-                  <MessageCircle size={20} aria-hidden />
-                  واتساب
-                </a>
               </div>
-            </div>
-          </div>
+
+              <motion.div
+                className="overflow-y-auto overflow-x-hidden px-5 pb-6 pt-2 max-h-[min(52dvh,420px)] sm:max-h-none [-webkit-overflow-scrolling:touch]"
+                variants={contentStagger}
+                initial="hidden"
+                animate="show"
+              >
+                <motion.div variants={rowFade} className="mt-4 rounded-lg border border-navy/10 bg-gradient-to-br from-slate-50 to-white p-4">
+                  <p className="text-xs text-muted mb-1 flex items-center gap-1.5">
+                    <Banknote size={14} className="text-sky-700" aria-hidden />
+                    السعر يبدأ من
+                  </p>
+                  <p className="text-2xl font-bold text-navy tabular-nums">{unit.price}</p>
+                  <p className="text-sm text-muted mt-2 border-t border-navy/10 pt-2">{unit.downPayment}</p>
+                </motion.div>
+
+                <motion.div
+                  variants={rowFade}
+                  className="mt-4 grid grid-cols-2 gap-3"
+                >
+                  <div className="rounded-lg border border-navy/10 bg-white p-3 text-center shadow-sm">
+                    <Home className="mx-auto mb-1 text-sky-700" size={20} aria-hidden />
+                    <p className="text-xs text-muted">الغرف</p>
+                    <p className="font-semibold text-navy text-sm mt-0.5">{unit.rooms}</p>
+                  </div>
+                  <div className="rounded-lg border border-navy/10 bg-white p-3 text-center shadow-sm">
+                    <Maximize className="mx-auto mb-1 text-sky-700" size={20} aria-hidden />
+                    <p className="text-xs text-muted">المساحة</p>
+                    <p className="font-semibold text-navy text-sm mt-0.5">{unit.area}</p>
+                  </div>
+                </motion.div>
+
+                <motion.div variants={rowFade} className="mt-4 flex items-start gap-2 rounded-lg border border-navy/8 bg-navy/[0.03] p-3">
+                  <MapPin className="shrink-0 text-sky-700 mt-0.5" size={18} aria-hidden />
+                  <div>
+                    <p className="text-xs text-muted">الموقع</p>
+                    <p className="text-sm font-medium text-navy leading-snug">{unit.location}</p>
+                    <p className="text-xs text-muted mt-1">
+                      {unit.project} · {unit.developer}
+                    </p>
+                  </div>
+                </motion.div>
+
+                <motion.div variants={rowFade} className="mt-6 flex flex-col sm:flex-row gap-3">
+                  <a
+                    href={telUrl}
+                    className="min-h-[48px] flex-1 inline-flex items-center justify-center gap-2 rounded-lg bg-navy text-white py-3 px-4 font-semibold hover:bg-navy/90 transition-colors touch-manipulation"
+                    onClick={() => trackMetaContact(project.slug, "phone_unit_modal")}
+                  >
+                    <Phone size={20} aria-hidden />
+                    اتصال
+                  </a>
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="min-h-[48px] flex-1 inline-flex items-center justify-center gap-2 rounded-lg bg-[#25D366] text-white py-3 px-4 font-semibold hover:bg-[#20bd5a] transition-colors touch-manipulation"
+                    onClick={() => trackMetaContact(project.slug, "whatsapp_unit_modal")}
+                  >
+                    <MessageCircle size={20} aria-hidden />
+                    واتساب
+                  </a>
+                </motion.div>
+              </motion.div>
+            </motion.div>
           </motion.div>
         ) : null}
       </AnimatePresence>

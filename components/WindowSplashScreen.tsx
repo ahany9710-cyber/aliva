@@ -67,7 +67,7 @@ export function WindowSplashScreen({ shutterImageSrc }: WindowSplashScreenProps)
         <button
           type="button"
           onClick={dismiss}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 px-5 py-2.5 rounded-xl bg-white/90 text-navy text-base font-medium hover:bg-white shadow-md transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 px-5 py-2.5 rounded-xl bg-white/90 text-navy text-base font-medium hover:bg-white shadow-md transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-navy/40 focus-visible:ring-offset-2"
           aria-label="تخطي"
         >
           تخطي

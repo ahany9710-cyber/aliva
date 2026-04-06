@@ -27,13 +27,13 @@ export function PricingSection({ project, contactPhone }: PricingSectionProps) {
         initial={sectionVariants.initial}
         whileInView={sectionVariants.animate}
         viewport={sectionVariants.viewport}
-        className="max-w-2xl mx-auto text-center p-8 rounded-2xl bg-white border border-navy/10 shadow-md"
+        className="max-w-2xl mx-auto text-center p-8 rounded-lg bg-gradient-to-br from-white via-slate-50/40 to-sky-100/40 border border-navy/10 shadow-md"
       >
         <h2 className="text-2xl font-bold text-navy mb-4 flex items-center justify-center gap-2">
-          <Tag size={24} className="text-gold" aria-hidden />
+          <Tag size={24} className="text-sky-700" aria-hidden />
           الأسعار والعروض
         </h2>
-        <p className="text-3xl font-bold text-gold mt-2">
+        <p className="text-3xl font-bold text-navy mt-2">
           يبدأ من {project.startingPrice}
         </p>
         <p className="text-muted mt-2">

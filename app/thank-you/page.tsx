@@ -16,7 +16,7 @@ export default function ThankYouPage() {
     <div className="min-h-screen flex flex-col bg-background">
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-16">
         <div className="max-w-md w-full text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gold/20 text-gold mb-6">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-navy/15 text-navy mb-6">
             <span className="text-3xl" aria-hidden>
               ✓
             </span>
@@ -40,7 +40,7 @@ export default function ThankYouPage() {
           </div>
         </div>
       </div>
-      <MinimalFooter />
+      <MinimalFooter mvStyle projectName={project.projectName} />
     </div>
   );
 }

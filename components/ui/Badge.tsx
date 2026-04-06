@@ -18,7 +18,7 @@ export function Badge({
       className={cn(
         "inline-flex items-center rounded-full px-3 py-1 text-sm font-medium",
         variant === "default" && "bg-navy/10 text-navy",
-        variant === "gold" && "bg-gold/15 text-amber-800",
+        variant === "gold" && "bg-navy/10 text-navy",
         variant === "outline" && "border border-navy/30 text-navy",
         className
       )}

@@ -40,7 +40,7 @@ export function StickyMobileCTA({
             trackClick(projectSlug, "cta_whatsapp");
             trackMetaContact(projectSlug, "whatsapp_sticky");
           }}
-          className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] text-white py-3 px-4 font-medium text-sm hover:bg-[#20bd5a] transition-colors"
+          className="flex-1 inline-flex items-center justify-center gap-2 rounded bg-[#25D366] text-white py-3 px-4 font-medium text-sm hover:bg-[#20bd5a] transition-colors"
         >
           {mvLanding ? (
             <img src="/mountainview-emblem-white.webp" alt="" aria-hidden className="w-7 h-7 object-contain" />
@@ -55,7 +55,7 @@ export function StickyMobileCTA({
             trackClick(projectSlug, "cta_call");
             trackMetaContact(projectSlug, "phone_sticky");
           }}
-          className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-gold text-white py-3 px-4 font-medium text-sm shadow-md hover:opacity-90 transition-opacity"
+          className="flex-1 inline-flex items-center justify-center gap-2 rounded bg-navy text-white py-3 px-4 font-medium text-sm shadow-md hover:bg-navy/90 transition-colors"
         >
           {mvLanding ? (
             <img src="/mountainview-emblem-white.webp" alt="" aria-hidden className="w-7 h-7 object-contain" />

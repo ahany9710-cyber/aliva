@@ -16,7 +16,7 @@ import { ALIVA_UNIT_FORM_OPTIONS } from "@/lib/aliva-units";
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xdapyovz";
 
 const selectBaseClasses =
-  "w-full rounded-xl border border-navy/20 bg-white px-4 py-3 text-foreground focus:border-gold focus:ring-2 focus:ring-gold/20 focus:outline-none";
+  "w-full rounded border border-navy/20 bg-white px-4 py-2.5 text-foreground text-base focus:border-navy focus:ring-2 focus:ring-navy/20 focus:outline-none";
 
 interface LeadFormSectionProps {
   project: ProjectContent;
@@ -90,21 +90,20 @@ export function LeadFormSection({ project }: LeadFormSectionProps) {
   }
 
   return (
-    <SectionWrapper id="lead-form" className="bg-navy/5 rounded-2xl">
+    <SectionWrapper id="lead-form" className="border-t border-navy/10 bg-white/90">
       <motion.div
         initial={sectionVariants.initial}
         whileInView={sectionVariants.animate}
         viewport={sectionVariants.viewport}
-        className="max-w-xl mx-auto"
+        className="max-w-xl mx-auto rounded-lg border border-navy/10 bg-white px-4 py-5 sm:px-6 sm:py-6"
       >
-        <h2 className="text-2xl font-bold text-navy mb-2">احجز استشارتك الآن</h2>
-        <p className="text-muted mb-5">
-          اترك بياناتك وسنتواصل معك في أقرب وقت بخصوص {project.projectName}. الحقل الوحيد الإلزامي هو رقم
-          الهاتف.
+        <h2 className="text-xl font-bold text-navy mb-1">احجز استشارتك الآن</h2>
+        <p className="text-sm text-muted mb-5">
+          {project.projectName}: الاسم وواتساب ونوع الوحدة اختياري — رقم الهاتف فقط إلزامي.
         </p>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           <div>
-            <label htmlFor="lead-name" className="block text-base font-medium text-navy mb-1">
+            <label htmlFor="lead-name" className="block text-sm font-medium text-navy mb-1">
               الاسم <span className="text-muted font-normal">(اختياري)</span>
             </label>
             <Input
@@ -112,13 +111,14 @@ export function LeadFormSection({ project }: LeadFormSectionProps) {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="أدخل اسمك"
+              placeholder="الاسم"
               autoComplete="name"
               disabled={submitting}
+              className="py-2.5"
             />
           </div>
           <div>
-            <label htmlFor="lead-phone" className="block text-base font-medium text-navy mb-1">
+            <label htmlFor="lead-phone" className="block text-sm font-medium text-navy mb-1">
               رقم الهاتف *
             </label>
             <Input
@@ -126,33 +126,31 @@ export function LeadFormSection({ project }: LeadFormSectionProps) {
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="+20 10xxxxxxxx أو +966 5xxxxxxxx"
+              placeholder="مثال: 01012345678"
               autoComplete="tel"
               disabled={submitting}
               error={errors.phone}
+              className="py-2.5"
             />
-            <p className="mt-1 text-sm text-muted">
-              مثال: 01012345678 أو 966501234567 (مصر، السعودية، البحرين، الإمارات، قطر)
-            </p>
           </div>
           <div>
-            <label htmlFor="lead-whatsapp" className="block text-base font-medium text-navy mb-1">
-              رقم واتساب <span className="text-muted font-normal">— أو أكد رقم الهاتف</span>
-              <span className="text-muted font-normal"> (اختياري)</span>
+            <label htmlFor="lead-whatsapp" className="block text-sm font-medium text-navy mb-1">
+              رقم واتساب <span className="text-muted font-normal">(اختياري)</span>
             </label>
             <Input
               id="lead-whatsapp"
               type="tel"
               value={whatsapp}
               onChange={(e) => setWhatsapp(e.target.value)}
-              placeholder="رقم واتساب إن كان مختلفاً، أو أعد كتابة رقم الهاتف للتأكيد"
+              placeholder="نفس رقم الهاتف أو رقم مختلف"
               autoComplete="tel"
               disabled={submitting}
               error={errors.whatsapp}
+              className="py-2.5"
             />
           </div>
           <div>
-            <label htmlFor="lead-unit" className="block text-base font-medium text-navy mb-1">
+            <label htmlFor="lead-unit" className="block text-sm font-medium text-navy mb-1">
               نوع الوحدة <span className="text-muted font-normal">(اختياري)</span>
             </label>
             <select
@@ -170,7 +168,7 @@ export function LeadFormSection({ project }: LeadFormSectionProps) {
             </select>
           </div>
           {errors.form && <p className="text-sm text-red-600">{errors.form}</p>}
-          <Button type="submit" size="lg" className="w-full gap-2" disabled={submitting}>
+          <Button type="submit" size="lg" className="w-full gap-2 mt-1" disabled={submitting}>
             {isAlivaLandingSlug(project.slug) ? (
               <img src="/mountainview-emblem-white.webp" alt="" aria-hidden className="w-7 h-7 object-contain" />
             ) : (

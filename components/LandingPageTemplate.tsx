@@ -49,8 +49,7 @@ interface LandingPageTemplateProps {
 }
 
 /**
- * Single landing page layout: header, all sections in order, footer, sticky mobile CTA.
- * Aliva landing at `/`.
+ * Aliva at `/`: Hero → Units → Why → Location → Pricing → Highlights → Lead → FAQ → Final CTA.
  */
 export function LandingPageTemplate({
   project,
@@ -71,25 +70,32 @@ export function LandingPageTemplate({
         projectSlug={project.slug}
         projectName={project.projectName}
         whatsappNumber={contactWhatsapp}
+        callPhone={contactPhone}
+        registerInterestLabel={project.leadFormCtaText ?? "سجّل اهتمامك"}
         whatsappInquiryMessage={project.whatsappInquiryMessage}
         logoSrc={alivaLanding ? "/Mountain View Logo.webp" : undefined}
         logoAlt={alivaLanding ? project.projectName : undefined}
         overHero={!!project.heroVideo}
+        mvStyle={alivaLanding}
       />
-      <main className="pb-16 md:pb-0">
+      <main className="pb-16 md:pb-0 bg-gradient-to-b from-white via-slate-50/40 to-white">
         <HeroSection project={project} contactPhone={contactPhone} />
         {alivaLanding && (
           <UnitsCardsSection project={project} contactPhone={contactPhone} contactWhatsapp={contactWhatsapp} />
         )}
-        <HighlightsSection project={project} />
         <WhyThisSection project={project} />
         <LocationSection project={project} />
         <PricingSection project={project} contactPhone={contactPhone} />
+        <HighlightsSection
+          project={project}
+          contactPhone={contactPhone}
+          contactWhatsapp={contactWhatsapp}
+        />
         <LeadFormSection project={project} />
         <FAQSection project={project} />
         <FinalCTASection project={project} contactWhatsapp={contactWhatsapp} />
       </main>
-      <MinimalFooter />
+      <MinimalFooter mvStyle={alivaLanding} projectName={project.projectName} />
       <StickyMobileCTA
         projectSlug={project.slug}
         whatsappNumber={contactWhatsapp}

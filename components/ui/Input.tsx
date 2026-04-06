@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 
 const inputBaseClasses =
-  "w-full rounded-xl border border-navy/20 bg-white px-4 py-3 text-foreground focus:border-gold focus:ring-2 focus:ring-gold/20 focus:outline-none";
+  "w-full rounded border border-navy/20 bg-white px-4 py-3 text-foreground focus:border-navy focus:ring-2 focus:ring-navy/20 focus:outline-none";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;

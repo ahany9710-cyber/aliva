@@ -15,58 +15,106 @@ interface HeroSectionProps {
   contactPhone?: string;
 }
 
-const HEADER_HEIGHT = 56;
+const HEADER_HEIGHT = 64;
 
 function HeroCTAs({
   callUrl,
   ctaText,
+  leadFormCtaText,
   slug,
+  variant,
 }: {
   callUrl: string;
   ctaText: string;
+  leadFormCtaText: string;
   slug: string;
+  variant: "video" | "image";
 }) {
   const mountainviewLogo = isAlivaLandingSlug(slug);
+  const onVideo = variant === "video";
+
   return (
     <div className="mt-8 flex flex-wrap gap-3">
-      <a
-        href={callUrl}
-        className="inline-flex items-center gap-2"
-        onClick={() => trackMetaContact(slug, "phone_hero")}
-      >
-        <Button size="lg" className="gap-2">
-          {mountainviewLogo ? (
-            <Image
-              src="/mountainview-emblem-white.webp"
-              alt=""
-              width={18}
-              height={18}
-              className="shrink-0 object-contain"
-              aria-hidden
-            />
+        <a
+          href={callUrl}
+          className="inline-flex items-center gap-2"
+          onClick={() => trackMetaContact(slug, "phone_hero")}
+        >
+          {onVideo ? (
+            <Button
+              size="lg"
+              className="gap-2 border border-white text-white bg-transparent shadow-none hover:bg-white/10 hover:text-white"
+            >
+              {mountainviewLogo ? (
+                <Image
+                  src="/mountainview-emblem-white.webp"
+                  alt=""
+                  width={18}
+                  height={18}
+                  className="shrink-0 object-contain"
+                  aria-hidden
+                />
+              ) : (
+                <Phone size={18} aria-hidden />
+              )}
+              {ctaText}
+            </Button>
           ) : (
-            <Phone size={18} aria-hidden />
+            <Button variant="mv-outline" size="lg" className="gap-2 shadow-none">
+              {mountainviewLogo ? (
+                <Image
+                  src="/mountainview-emblem-gold.webp"
+                  alt=""
+                  width={18}
+                  height={18}
+                  className="shrink-0 object-contain"
+                  aria-hidden
+                />
+              ) : (
+                <Phone size={18} aria-hidden />
+              )}
+              {ctaText}
+            </Button>
           )}
-          {ctaText}
-        </Button>
-      </a>
-      <a href="#lead-form" className="inline-flex items-center gap-2">
-        <Button variant="secondary" size="lg" className="gap-2">
-          {mountainviewLogo ? (
-            <Image
-              src="/mountainview-emblem-gold.webp"
-              alt=""
-              width={18}
-              height={18}
-              className="shrink-0 object-contain"
-              aria-hidden
-            />
+        </a>
+        <a href="#lead-form" className="inline-flex items-center gap-2">
+          {onVideo ? (
+            <Button
+              size="lg"
+              className="gap-2 border border-white bg-white text-navy shadow-none hover:bg-white/90 hover:text-navy"
+            >
+              {mountainviewLogo ? (
+                <Image
+                  src="/mountainview-emblem-gold.webp"
+                  alt=""
+                  width={18}
+                  height={18}
+                  className="shrink-0 object-contain"
+                  aria-hidden
+                />
+              ) : (
+                <MessageSquare size={18} aria-hidden />
+              )}
+              {leadFormCtaText}
+            </Button>
           ) : (
-            <MessageSquare size={18} aria-hidden />
+            <Button variant="primary" size="lg" className="gap-2">
+              {mountainviewLogo ? (
+                <Image
+                  src="/mountainview-emblem-white.webp"
+                  alt=""
+                  width={18}
+                  height={18}
+                  className="shrink-0 object-contain"
+                  aria-hidden
+                />
+              ) : (
+                <MessageSquare size={18} aria-hidden />
+              )}
+              {leadFormCtaText}
+            </Button>
           )}
-          سجل الآن
-        </Button>
-      </a>
+        </a>
     </div>
   );
 }
@@ -77,6 +125,8 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
   const hasVideo = !!project.heroVideo;
   const videoRef = useRef<HTMLVideoElement>(null);
   const [needsTap, setNeedsTap] = useState(false);
+
+  const leadFormCtaText = project.leadFormCtaText ?? "سجّل اهتمامك";
 
   useEffect(() => {
     const video = videoRef.current;
@@ -92,17 +142,13 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
       }
     };
 
-    // Hide tap overlay as soon as video is actually running
     const onPlaying = () => setNeedsTap(false);
 
-    // Show tap overlay on mobile/Safari when video is ready but still paused
-    // (autoplay blocked — user must tap to satisfy the gesture requirement)
     const onCanPlay = () => {
       tryPlay();
       if (video.paused) setNeedsTap(true);
     };
 
-    // Resume when tab regains focus or user navigates back (bfcache)
     const onResume = () => tryPlay();
 
     video.addEventListener("canplay", onCanPlay);
@@ -110,7 +156,6 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
     document.addEventListener("visibilitychange", onResume);
     window.addEventListener("pageshow", onResume);
 
-    // Kick-start immediately in case canplay already fired
     tryPlay();
 
     return () => {
@@ -136,13 +181,6 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
         style={{ marginTop: -HEADER_HEIGHT, paddingTop: HEADER_HEIGHT + 24 }}
       >
         <div className="absolute inset-0 z-0">
-          {/*
-            Source order matters:
-            - MP4 listed BEFORE WebM so iOS/Safari picks the correct format immediately
-              instead of scanning past WebM entries it cannot play.
-            - Each format has a mobile variant (max-width: 768px) for smaller file sizes.
-            - preload="auto"; fetchpriority is set in effect for LCP hint.
-          */}
           <video
             ref={videoRef}
             autoPlay
@@ -165,12 +203,14 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
             <source src={project.heroVideo} type="video/webm" />
           </video>
 
-          {/* Tap-to-play: shown on mobile/Safari when autoplay is blocked */}
           {needsTap && (
             <button
               type="button"
               onClick={handleTap}
-              onTouchEnd={(e) => { e.preventDefault(); handleTap(); }}
+              onTouchEnd={(e) => {
+                e.preventDefault();
+                handleTap();
+              }}
               className="absolute inset-0 z-10 flex items-center justify-center bg-black/25"
               aria-label="تشغيل الفيديو"
             >
@@ -180,13 +220,12 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
             </button>
           )}
 
-          {/* RTL readable gradient — pointer-events off so it never blocks taps */}
           <div
             aria-hidden
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "linear-gradient(to left, rgba(250,250,249,0.4) 0%, rgba(250,250,249,0.2) 25%, transparent 45%)",
+                "linear-gradient(to left, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.22) 25%, transparent 45%)",
             }}
           />
         </div>
@@ -211,7 +250,13 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
                 {project.subheadline}
               </p>
             )}
-            <HeroCTAs callUrl={callUrl} ctaText={project.ctaText} slug={project.slug} />
+            <HeroCTAs
+              callUrl={callUrl}
+              ctaText={project.ctaText}
+              leadFormCtaText={leadFormCtaText}
+              slug={project.slug}
+              variant="video"
+            />
           </motion.div>
           <div className="order-1 md:order-2 hidden md:block" aria-hidden />
         </div>
@@ -241,13 +286,19 @@ export function HeroSection({ project, contactPhone }: HeroSectionProps) {
               {project.subheadline}
             </p>
           )}
-          <HeroCTAs callUrl={callUrl} ctaText={project.ctaText} slug={project.slug} />
+          <HeroCTAs
+            callUrl={callUrl}
+            ctaText={project.ctaText}
+            leadFormCtaText={leadFormCtaText}
+            slug={project.slug}
+            variant="image"
+          />
         </motion.div>
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, delay: 0.1 }}
-          className="order-1 md:order-2 relative aspect-4/3 rounded-2xl overflow-hidden shadow-xl bg-navy/5"
+          className="order-1 md:order-2 relative aspect-4/3 rounded-lg overflow-hidden shadow-xl bg-navy/5"
         >
           <Image
             src={project.heroImage}
