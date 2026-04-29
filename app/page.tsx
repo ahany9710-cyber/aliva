@@ -16,7 +16,9 @@ import { FAQSection } from "@/components/sections/FAQSection";
 import { FinalCTASection } from "@/components/sections/FinalCTASection";
 
 export const metadata: Metadata = {
-  title: "ماونتن ڤيو — أليڤا، جراند فاليز، وإطلاق هايد بارك الجديد",
+  // `absolute` skips the layout's "%s | ماونتن ڤيو" template so the brand
+  // doesn't get appended to a title that already starts with it.
+  title: { absolute: "ماونتن ڤيو — أليڤا، جراند فاليز، وإطلاق هايد بارك الجديد" },
   description:
     "٣ مشاريع من ماونتن ڤيو في القاهرة الجديدة، المستقبل سيتي، والعاصمة الإدارية. مقدم يبدأ من ٥٪، تقسيط حتى ١٠ سنوات. احجز كلمة قصيرة على الهاتف أو واتساب.",
   alternates: { canonical: "/" },
