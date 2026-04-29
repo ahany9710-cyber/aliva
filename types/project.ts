@@ -24,14 +24,40 @@ export interface ProjectFAQ {
   answer: string
 }
 
+/** A buyable unit type within a project (apartment / villa / townhouse, …). */
+export interface ProjectUnit {
+  /** Short label shown on the unit card (e.g. "شقة ٣ غرف"). */
+  type: string
+  /** Image used on the unit card. Must live under /public. */
+  image: string
+  rooms?: string
+  area?: string
+  /** Display string for price (Arabic numerals OK). */
+  price: string
+  /** Display string for down payment / installment line. */
+  payment?: string
+}
+
 export interface ProjectContent {
   slug: string
   projectName: string
   developer: string
+  /** Short city/area label used in compare cards & breadcrumbs (e.g. "المستقبل سيتي"). */
+  city?: string
+  /** Long-form location description shown in the location section. */
   location: string
   headline: string
   subheadline: string
   description: string
+  /** Card / showcase cover image. Prefer over heroImage for new projects. */
+  cover?: string
+  /** Optional small gallery images shown under the showcase section. */
+  galleryImages?: string[]
+  /** Optional buyable unit types for the unit-cards strip. */
+  units?: ProjectUnit[]
+  /** Optional amenities chips (e.g. "نادي", "تراك جري"). */
+  amenities?: string[]
+  /** Legacy: hero image — kept for backwards compatibility. */
   heroImage: string
   /** Optional image for About / secondary sections. Omit when the hero already uses heroImage/video so the same art is not shown twice. */
   aboutImage?: string
@@ -64,4 +90,6 @@ export interface ProjectContent {
   /** Optional CTA text for the lead form submit button. When set, used instead of ctaText in the form. */
   leadFormCtaText?: string
   offerBadge?: string
+  /** Optional path to the project's brochure PDF (under /public). Renders the "حمّل البروشور" button when set. */
+  brochureUrl?: string
 }

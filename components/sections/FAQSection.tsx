@@ -5,13 +5,14 @@ import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { fadeInUp, noMotion } from "@/lib/motion";
-import type { ProjectContent } from "@/types/project";
+import type { ProjectFAQ } from "@/types/project";
 
 interface FAQSectionProps {
-  project: ProjectContent;
+  faqs: ProjectFAQ[];
+  title?: string;
 }
 
-export function FAQSection({ project }: FAQSectionProps) {
+export function FAQSection({ faqs, title = "أسئلة شائعة" }: FAQSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const reducedMotion = useReducedMotion();
   const sectionVariants = reducedMotion ? noMotion : fadeInUp;
@@ -24,12 +25,12 @@ export function FAQSection({ project }: FAQSectionProps) {
         viewport={sectionVariants.viewport}
         className="text-2xl font-bold text-navy mb-5 text-center"
       >
-        أسئلة شائعة
+        {title}
       </motion.h2>
       <div className="max-w-2xl mx-auto space-y-2">
-        {project.faqs.map((faq, i) => (
+        {faqs.map((faq, i) => (
           <motion.div
-            key={i}
+            key={faq.question}
             initial={sectionVariants.initial}
             whileInView={sectionVariants.animate}
             viewport={sectionVariants.viewport}

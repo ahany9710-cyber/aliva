@@ -3,19 +3,26 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { fadeInUp, noMotion } from "@/lib/motion";
-import type { ProjectContent } from "@/types/project";
+import type { ProjectWhyPoint } from "@/types/project";
 
 interface WhyThisSectionProps {
-  project: ProjectContent;
+  /** Either pass a list of whyPoints, or pass a project + we'll use project.whyPoints. */
+  whyPoints: ProjectWhyPoint[];
+  title?: string;
+  eyebrow?: string;
 }
 
-export function WhyThisSection({ project }: WhyThisSectionProps) {
+export function WhyThisSection({
+  whyPoints,
+  title = "ليه ماونتن ڤيو؟",
+  eyebrow = "تشكيلة | خبرة | فريق متاح دلوقتي",
+}: WhyThisSectionProps) {
   const reducedMotion = useReducedMotion();
   const sectionVariants = reducedMotion ? noMotion : fadeInUp;
 
   return (
     <SectionWrapper
-      id="why-this-project"
+      id="why-mountain-view"
       className="rounded-lg border border-navy/10 bg-gradient-to-br from-white via-slate-50/50 to-sky-100/30"
     >
       <motion.p
@@ -24,18 +31,18 @@ export function WhyThisSection({ project }: WhyThisSectionProps) {
         viewport={sectionVariants.viewport}
         className="section-label mb-3 text-center"
       >
-        نمط حياة | تجارب متنوعة | مجتمع متكامل
+        {eyebrow}
       </motion.p>
       <motion.h2
         initial={sectionVariants.initial}
         whileInView={sectionVariants.animate}
         viewport={sectionVariants.viewport}
-        className="text-3xl font-light text-navy mb-10 text-center leading-snug"
+        className="text-2xl sm:text-3xl font-bold text-navy mb-8 text-center leading-snug"
       >
-        لماذا تختار {project.projectName}؟
+        {title}
       </motion.h2>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {project.whyPoints.map((point, i) => (
+      <div className="grid sm:grid-cols-2 lg:grid-cols-2 gap-5">
+        {whyPoints.map((point, i) => (
           <motion.article
             key={point.title}
             initial={sectionVariants.initial}
@@ -45,9 +52,7 @@ export function WhyThisSection({ project }: WhyThisSectionProps) {
             className="ps-5 py-5 pe-4 bg-white border-s-4 border-sky-700 rounded-none shadow-none"
           >
             <h3 className="font-semibold text-navy text-lg">{point.title}</h3>
-            <p className="mt-2 text-muted leading-relaxed">
-              {point.description}
-            </p>
+            <p className="mt-2 text-muted leading-relaxed">{point.description}</p>
           </motion.article>
         ))}
       </div>

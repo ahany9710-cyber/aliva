@@ -13,11 +13,17 @@ const cairo = Cairo({
 
 export const metadata: Metadata = {
   title: {
-    default: "أليڤا ماونتن ڤيو | المستقبل سيتي",
-    template: "%s",
+    default: "ماونتن ڤيو — أليڤا، جراند فاليز، والإطلاق الجديد",
+    template: "%s | ماونتن ڤيو",
   },
   description:
-    "شقق وآي ڤيلا وتاون هاوس في المستقبل سيتي — مقدم ١٠٠ ألف جنيه وتقسيط حتى ١٠ سنوات.",
+    "٣ مشاريع من ماونتن ڤيو في القاهرة الجديدة، المستقبل سيتي، والعاصمة الإدارية — مقدم يبدأ من ٥٪ وتقسيط حتى ١٠ سنوات. اتصل أو راسلنا واتساب.",
+  metadataBase: new URL("https://mountainview.realestates.properties"),
+  openGraph: {
+    type: "website",
+    locale: "ar_EG",
+    images: [{ url: "/projects/aliva/cover.png", width: 1200, height: 630 }],
+  },
 };
 
 export default function RootLayout({
@@ -27,9 +33,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl" className={cairo.variable}>
-      <head>
-        <link rel="preload" as="image" href="/shutters.webp" />
-      </head>
       <body className="antialiased min-h-screen bg-background text-foreground">
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`}
